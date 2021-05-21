@@ -673,7 +673,7 @@ function whinny:register_mob(name, def)
 					}
 				)
 			else
-				core.sound_play("default_sword_wood",
+				core.sound_play("player_damage",
 					{
 						object = hitter,
 					}
