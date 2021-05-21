@@ -11,6 +11,17 @@ local horse_likes = {
 	"farming:cucumber",
 }
 
+-- remove unregistered items to keep iterations lower
+for i = #horse_likes, 1, -1 do
+	local iname = horse_likes[i]
+	if not core.registered_items[iname] then
+		whinny.log("warning", "\"" .. iname
+			.. "\" is not a registered item, removing it from items that horse will follow")
+		table.remove(horse_likes, i)
+	end
+end
+
+
 local function is_ground(pos)
 	local nn = core.get_node(pos).name
 	return core.get_item_group(nn, "crumbly") ~= 0 or
