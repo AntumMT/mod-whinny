@@ -2,3 +2,4 @@
 TODO:
 - fix drops
 - use player yaw to turn horse instead of a/d keys
+- add localization support
