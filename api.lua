@@ -778,7 +778,7 @@ function whinny:register_spawn(name, nodes, max_light, min_light, chance, active
 			local get_node_pos_name
 			local registered_node
 
-			get_node_pos = core.get_node (pos)
+			get_node_pos = core.get_node(pos)
 			if get_node_pos == nil then return end
 
 			get_node_pos_name = get_node_pos.name
@@ -791,7 +791,7 @@ function whinny:register_spawn(name, nodes, max_light, min_light, chance, active
 
 			pos.y = pos.y+1
 
-			get_node_pos = core.get_node (pos)
+			get_node_pos = core.get_node(pos)
 			if get_node_pos == nil then return end
 
 			get_node_pos_name = get_node_pos.name

@@ -32,8 +32,8 @@ if core.registered_items["mobs:meat_raw"] then
 	table.insert(horse_drops, {name="mobs:meat_raw", chance=1, min=2, max=3})
 end
 
-local function register_wildhorse (basename)
-	whinny:register_mob ("whinny:horse"..basename, {
+local function register_wildhorse(basename)
+	whinny:register_mob("whinny:horse"..basename, {
 		type = "animal",
 		hp_min = 10,
 		hp_max = 10,
@@ -67,7 +67,7 @@ local function register_wildhorse (basename)
 		on_rightclick = function(self, clicker)
 			local item = clicker:get_wielded_item()
 			if item:get_name() == "farming:wheat" then
-				core.add_entity (self.object:get_pos(), "whinny:horse"..basename.."h1")
+				core.add_entity(self.object:get_pos(), "whinny:horse"..basename.."h1")
 					if not whinny.creative then
 						item:take_item()
 						clicker:set_wielded_item(item)
@@ -313,12 +313,12 @@ local function register_tamehorse(basename, description)
 	})
 end
 
-register_tamehorse ("", "Brown Horse")
-register_wildhorse ("")
-register_tamehorse ("peg", "White Horse")
-register_wildhorse ("peg")
-register_tamehorse ("ara", "Black Horse")
-register_wildhorse ("ara")
+register_tamehorse("", "Brown Horse")
+register_wildhorse("")
+register_tamehorse("peg", "White Horse")
+register_wildhorse("peg")
+register_tamehorse("ara", "Black Horse")
+register_wildhorse("ara")
 
 --function whinny:register_spawn(name, nodes, max_light, min_light, chance, active_object_count, max_height, spawn_func)
 
