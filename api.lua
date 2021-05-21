@@ -160,7 +160,7 @@ function whinny:register_mob(name, def)
 		end,
 
 		on_step = function(self, dtime)
-			if self.type == "monster" and core.setting_getbool("only_peaceful_whinny") then
+			if self.type == "monster" and core.settings:get_bool("only_peaceful_whinny") then
 				self.object:remove()
 			end
 
@@ -272,7 +272,7 @@ function whinny:register_mob(name, def)
 
 			-- FIND SOMEONE TO ATTACK
 			if ( self.type == "monster" or self.type == "barbarian" ) and
-					core.setting_getbool("enable_damage") and self.state ~= "attack" then
+					core.settings:get_bool("enable_damage") and self.state ~= "attack" then
 
 				local s = self.object:get_pos()
 				local inradius = core.get_objects_inside_radius(s,self.view_range)
@@ -614,7 +614,7 @@ function whinny:register_mob(name, def)
 			self.object:set_velocity({x=0, y=self.object:get_velocity().y, z=0})
 			self.object:set_yaw(math.random(1, 360)/180*math.pi)
 
-			if self.type == "monster" and core.setting_getbool("only_peaceful_whinny") then
+			if self.type == "monster" and core.settings:get_bool("only_peaceful_whinny") then
 				self.object:remove()
 			end
 
@@ -798,7 +798,7 @@ function whinny:register_spawn(name, nodes, max_light, min_light, chance, active
 
 			if spawn_func and not spawn_func(pos, node) then return end
 
-			if core.setting_getbool("display_mob_spawn") then
+			if core.settings:get_bool("display_mob_spawn") then
 				core.chat_send_all("[whinny] Add "..name.." at "..core.pos_to_string(pos))
 			end
 

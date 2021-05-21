@@ -70,7 +70,7 @@ local function register_wildhorse (basename)
 			local item = clicker:get_wielded_item()
 			if item:get_name() == "farming:wheat" then
 				core.add_entity (self.object:get_pos(), "whinny:horse"..basename.."h1")
-					if not core.setting_getbool("creative_mode") then
+					if not core.settings:get_bool("creative_mode") then
 						item:take_item()
 						clicker:set_wielded_item(item)
 					end
@@ -90,7 +90,7 @@ local function register_basehorse(name, craftitem, horse)
 		function craftitem.on_place(itemstack, placer, pointed_thing)
 			if pointed_thing.above then
 				core.env:add_entity(pointed_thing.above, name)
-				if not core.setting_getbool("creative_mode") then
+				if not core.settings:get_bool("creative_mode") then
 					itemstack:take_item()
 				end
 			end
