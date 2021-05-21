@@ -6,6 +6,7 @@ function whinny:register_mob(name, def)
 		name = name,
 		hp_min = def.hp_min,
 		hp_max = def.hp_max,
+		appetite = def.appetite,
 		physical = true,
 		collisionbox = def.collisionbox,
 		visual = def.visual,

@@ -1,23 +1,24 @@
 
 local rot_compensate = 4.7
 
-local horse_likes = {
-	"default:apple",
-	"farming:wheat",
-	"farming:barley",
-	"farming:oat",
-	"farming:carrot",
-	"farming:carrot_gold",
-	"farming:cucumber",
+-- name, fill value
+local fill_values = {
+	["default:apple"] = 2,
+	["farming:wheat"] = 1,
+	["farming:barley"] = 3,
+	["farming:oat"] = 5,
+	["farming:carrot"] = 4,
+	["farming:carrot_gold"] = 5,
+	["farming:cucumber"] = 2,
 }
 
--- remove unregistered items to keep iterations lower
-for i = #horse_likes, 1, -1 do
-	local iname = horse_likes[i]
-	if not core.registered_items[iname] then
+local horse_likes = {}
+for iname, fill in pairs(fill_values) do
+	if core.registered_items[iname] then
+		table.insert(horse_likes, iname)
+	else
 		whinny.log("warning", "\"" .. iname
 			.. "\" is not a registered item, removing it from items that horse will follow")
-		table.remove(horse_likes, i)
 	end
 end
 
@@ -60,6 +61,7 @@ local function register_wildhorse(color)
 		type = "animal",
 		hp_min = 10,
 		hp_max = 10,
+		appetite = 40,
 		collisionbox = {-.5, -0.01, -.5, .5, 1.4, .5},
 		available_textures = {
 			total = 1,
@@ -88,6 +90,7 @@ local function register_wildhorse(color)
 		follow = horse_likes,
 		view_range = 5,
 		on_rightclick = function(self, clicker)
+			local pname = clicker:get_player_name()
 			local item = clicker:get_wielded_item()
 			local item_name = item:get_name()
 			local wants = false
@@ -104,14 +107,32 @@ local function register_wildhorse(color)
 			end
 
 			if wants then
-				core.add_entity(self.object:get_pos(), "whinny:horse_" .. color .. "_tame")
-					if not whinny.creative then
-						item:take_item()
-						clicker:set_wielded_item(item)
-					end
+				local fills = fill_values[item_name]
+				if not fills then fills = 1 end
+
+				self.appetite = self.appetite - fills
+
+				if not whinny.creative then
+					item:take_item()
+					clicker:set_wielded_item(item)
+				end
+
+				if self.appetite <= 0 then
+					-- replace with tamed horse
+					core.add_entity(self.object:get_pos(), "whinny:horse_" .. color .. "_tame")
 					self.object:remove()
+
+					core.chat_send_player(pname, "This horse is now tame!")
+					return
+				else
+					core.chat_send_player(pname, "This horse is still hungry. Keep feeding it.")
+				end
+			else
+				-- can't ride wild horses
+				core.chat_send_player(pname, "This horse is too wild to ride. Try feeding it.")
 			end
 		end,
+
 		jump = true,
 		step = 1,
 		passive = true,
