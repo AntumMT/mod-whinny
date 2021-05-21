@@ -1,10 +1,10 @@
 
 local function is_ground(pos)
-	local nn = minetest.get_node(pos).name
-	return minetest.get_item_group(nn, "crumbly") ~= 0 or
-	minetest.get_item_group(nn, "cracky") ~= 0 or
-	minetest.get_item_group(nn, "choppy") ~= 0 or
-	minetest.get_item_group(nn, "snappy") ~= 0
+	local nn = core.get_node(pos).name
+	return core.get_item_group(nn, "crumbly") ~= 0 or
+	core.get_item_group(nn, "cracky") ~= 0 or
+	core.get_item_group(nn, "choppy") ~= 0 or
+	core.get_item_group(nn, "snappy") ~= 0
 end
 
 local function get_sign(i)
@@ -69,8 +69,8 @@ local function register_wildhorse (basename)
 		on_rightclick = function(self, clicker)
 			local item = clicker:get_wielded_item()
 			if item:get_name() == "farming:wheat" then
-				minetest.add_entity (self.object:get_pos(), "whinny:horse"..basename.."h1")
-					if not minetest.setting_getbool("creative_mode") then
+				core.add_entity (self.object:get_pos(), "whinny:horse"..basename.."h1")
+					if not core.setting_getbool("creative_mode") then
 						item:take_item()
 						clicker:set_wielded_item(item)
 					end
@@ -89,14 +89,14 @@ local function register_basehorse(name, craftitem, horse)
 	if craftitem ~= nil then
 		function craftitem.on_place(itemstack, placer, pointed_thing)
 			if pointed_thing.above then
-				minetest.env:add_entity(pointed_thing.above, name)
-				if not minetest.setting_getbool("creative_mode") then
+				core.env:add_entity(pointed_thing.above, name)
+				if not core.setting_getbool("creative_mode") then
 					itemstack:take_item()
 				end
 			end
 			return itemstack
 		end
-		minetest.register_craftitem(name, craftitem)
+		core.register_craftitem(name, craftitem)
 	end
 
 	function horse:set_animation(type)
@@ -193,7 +193,7 @@ local function register_basehorse(name, craftitem, horse)
 		end
 
 		-- make sure we don't go past the limit
-		if minetest.get_item_group(minetest.get_node(inside_block).name, "water") ~= 0 then
+		if core.get_item_group(core.get_node(inside_block).name, "water") ~= 0 then
 			if math.abs(self.speed) > self.max_speed * .2 then
 				self.speed = self.max_speed*get_sign(self.speed)*.2
 			end
@@ -206,7 +206,7 @@ local function register_basehorse(name, craftitem, horse)
 		local p = self.object:get_pos()
 		p.y = p.y+1
 		if not is_ground(p) then
-			if minetest.registered_nodes[minetest.get_node(p).name].walkable then
+			if core.registered_nodes[core.get_node(p).name].walkable then
 				self.speed = 0
 			end
 			self.object:set_acceleration({x=0, y=-10, z=0})
@@ -231,13 +231,13 @@ local function register_basehorse(name, craftitem, horse)
 				end
 				local x = math.sin(yaw) * -2
 				local z = math.cos(yaw) * 2
-				if minetest.get_item_group(minetest.get_node(inside_block).name, "water") ~= 0 then
+				if core.get_item_group(core.get_node(inside_block).name, "water") ~= 0 then
 						self.object:set_acceleration({x = x, y = .1, z = z})
 				else
 						self.object:set_acceleration({x = x, y = -10, z = z})
 				end
 		else
-				if minetest.get_item_group(minetest.get_node(inside_block).name, "water") ~= 0 then
+				if core.get_item_group(core.get_node(inside_block).name, "water") ~= 0 then
 						self.object:set_acceleration({x = 0, y = .1, z = 0})
 				else
 						self.object:set_acceleration({x = 0, y = -10, z = 0})
@@ -280,7 +280,7 @@ local function register_basehorse(name, craftitem, horse)
 		end
 	end
 
-	minetest.register_entity(name, horse)
+	core.register_entity(name, horse)
 end
 
 local function register_tamehorse(basename, description)

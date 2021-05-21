@@ -3,7 +3,7 @@ whinny = {}
 local yaw = {}
 
 function whinny:register_mob(name, def)
-	minetest.register_entity(name, {
+	core.register_entity(name, {
 		name = name,
 		hp_min = def.hp_min,
 		hp_max = def.hp_max,
@@ -56,7 +56,7 @@ function whinny:register_mob(name, def)
 			if self.state ~= "attack" then
 				if self.sounds.war_cry then
 					if math.random(0,100) < 90 then
-									minetest.sound_play(self.sounds.war_cry,{ object = self.object })
+									core.sound_play(self.sounds.war_cry,{ object = self.object })
 					end
 				end
 
@@ -160,7 +160,7 @@ function whinny:register_mob(name, def)
 		end,
 
 		on_step = function(self, dtime)
-			if self.type == "monster" and minetest.setting_getbool("only_peaceful_whinny") then
+			if self.type == "monster" and core.setting_getbool("only_peaceful_whinny") then
 				self.object:remove()
 			end
 
@@ -169,14 +169,14 @@ function whinny:register_mob(name, def)
 			--if self.lifetimer <= 0 and not self.tamed and self.type ~= "npc" then
 			if self.lifetimer <= 0 and not self.tamed and self.name ~= "whinny:ent" then
 				local player_count = 0
-				for _,obj in ipairs(minetest.get_objects_inside_radius(self.object:get_pos(), 10)) do
+				for _,obj in ipairs(core.get_objects_inside_radius(self.object:get_pos(), 10)) do
 					if obj:is_player() then
 						player_count = player_count+1
 					end
 				end
 
 				if player_count == 0 and self.state ~= "attack" then
-					minetest.log("action","lifetimer expired, removed mob "..self.name)
+					core.log("action","lifetimer expired, removed mob "..self.name)
 					self.object:remove()
 					return
 				end
@@ -191,13 +191,13 @@ function whinny:register_mob(name, def)
 				local x = math.sin(yaw) * -2
 				local z = math.cos(yaw) * 2
 
-				if minetest.get_item_group(minetest.get_node(self.object:get_pos()).name, "water") ~= 0 then
+				if core.get_item_group(core.get_node(self.object:get_pos()).name, "water") ~= 0 then
 					self.object:set_acceleration({x = x, y = 1.5, z = z})
 				else
 					self.object:set_acceleration({x = x, y = -14.5, z = z})
 				end
 			else
-				if minetest.get_item_group(minetest.get_node(self.object:get_pos()).name, "water") ~= 0 then
+				if core.get_item_group(core.get_node(self.object:get_pos()).name, "water") ~= 0 then
 					self.object:set_acceleration({x = 0, y = 1.5, z = 0})
 				else
 					self.object:set_acceleration({x = 0, y = -14.5, z = 0})
@@ -229,16 +229,16 @@ function whinny:register_mob(name, def)
 			end
 
 			if self.sounds and self.sounds.random and math.random(1, 100) <= 1 then
-				minetest.sound_play(self.sounds.random, {object = self.object})
+				core.sound_play(self.sounds.random, {object = self.object})
 			end
 
 			local do_env_damage = function(self)
 			local pos = self.object:get_pos()
-			local n = minetest.get_node(pos)
+			local n = core.get_node(pos)
 
 			if self.light_damage and self.light_damage ~= 0 and pos.y>0 and
-					minetest.get_node_light(pos) and minetest.get_node_light(pos) > 4 and
-					minetest.get_timeofday() > 0.2 and minetest.get_timeofday() < 0.8 then
+					core.get_node_light(pos) and core.get_node_light(pos) > 4 and
+					core.get_timeofday() > 0.2 and core.get_timeofday() < 0.8 then
 				self.object:set_hp(self.object:get_hp()-self.light_damage)
 				if self.object:get_hp() == 0 then
 					self.object:remove()
@@ -246,7 +246,7 @@ function whinny:register_mob(name, def)
 			end
 
 			if self.water_damage and self.water_damage ~= 0 and
-					minetest.get_item_group(n.name, "water") ~= 0 then
+					core.get_item_group(n.name, "water") ~= 0 then
 				self.object:set_hp(self.object:get_hp()-self.water_damage)
 				if self.object:get_hp() == 0 then
 					self.object:remove()
@@ -254,7 +254,7 @@ function whinny:register_mob(name, def)
 			end
 
 			if self.lava_damage and self.lava_damage ~= 0 and
-					minetest.get_item_group(n.name, "lava") ~= 0 then
+					core.get_item_group(n.name, "lava") ~= 0 then
 				self.object:set_hp(self.object:get_hp()-self.lava_damage)
 				if self.object:get_hp() == 0 then
 					self.object:remove()
@@ -272,10 +272,10 @@ function whinny:register_mob(name, def)
 
 			-- FIND SOMEONE TO ATTACK
 			if ( self.type == "monster" or self.type == "barbarian" ) and
-					minetest.setting_getbool("enable_damage") and self.state ~= "attack" then
+					core.setting_getbool("enable_damage") and self.state ~= "attack" then
 
 				local s = self.object:get_pos()
-				local inradius = minetest.get_objects_inside_radius(s,self.view_range)
+				local inradius = core.get_objects_inside_radius(s,self.view_range)
 				local player = nil
 				local type = nil
 				for _,oir in ipairs(inradius) do
@@ -298,7 +298,7 @@ function whinny:register_mob(name, def)
 						sp.y = sp.y + 1         -- aim higher to make looking up hills more realistic
 						local dist = ((p.x-s.x)^2 + (p.y-s.y)^2 + (p.z-s.z)^2)^0.5
 						if dist < self.view_range and self.in_fov(self,p) then
-							if minetest.line_of_sight(sp,p,2) == true then
+							if core.line_of_sight(sp,p,2) == true then
 								self.do_attack(self,player,dist)
 								break
 							end
@@ -310,7 +310,7 @@ function whinny:register_mob(name, def)
 			-- NPC FIND A MONSTER TO ATTACK
 			if self.type == "npc" and self.attacks_monsters and self.state ~= "attack" then
 				local s = self.object:get_pos()
-				local inradius = minetest.get_objects_inside_radius(s,self.view_range)
+				local inradius = core.get_objects_inside_radius(s,self.view_range)
 				for _, oir in pairs(inradius) do
 					local obj = oir:get_luaentity()
 					if obj then
@@ -318,7 +318,7 @@ function whinny:register_mob(name, def)
 							-- attack monster
 							local p = obj.object:get_pos()
 							local dist = ((p.x-s.x)^2 + (p.y-s.y)^2 + (p.z-s.z)^2)^0.5
-							print("attack monster at "..minetest.pos_to_string(obj.object:get_pos()))
+							print("attack monster at "..core.pos_to_string(obj.object:get_pos()))
 							self.do_attack(self,obj.object,dist)
 							break
 						end
@@ -327,7 +327,7 @@ function whinny:register_mob(name, def)
 			end
 
 			if self.follow ~= "" and not self.following then
-				for _,player in pairs(minetest.get_connected_players()) do
+				for _,player in pairs(core.get_connected_players()) do
 					local s = self.object:get_pos()
 					local p = player:get_pos()
 
@@ -392,7 +392,7 @@ function whinny:register_mob(name, def)
 					local lp = nil
 					local s = self.object:get_pos()
 					if self.type == "npc" then
-						local o = minetest.get_objects_inside_radius(self.object:get_pos(), 3)
+						local o = core.get_objects_inside_radius(self.object:get_pos(), 3)
 
 						local yaw = 0
 						for _,o in ipairs(o) do
@@ -507,9 +507,9 @@ function whinny:register_mob(name, def)
 						p2.y = p2.y + 1.5
 						s2.y = s2.y + 1.5
 
-						if minetest.line_of_sight(p2,s2) == true then
+						if core.line_of_sight(p2,s2) == true then
 							if self.sounds and self.sounds.attack then
-								minetest.sound_play(self.sounds.attack, {object = self.object})
+								core.sound_play(self.sounds.attack, {object = self.object})
 							end
 
 							self.attack.player:punch(self.object, 1.0,
@@ -522,7 +522,7 @@ function whinny:register_mob(name, def)
 
 							if math.random(0,3) == 3 and self.attack.player:is_player() then
 								local snum = math.random(1,4)
-								minetest.sound_play("default_hurt"..tostring(snum),
+								core.sound_play("default_hurt"..tostring(snum),
 									{
 										object = self.attack.player,
 									}
@@ -584,12 +584,12 @@ function whinny:register_mob(name, def)
 					self:set_animation("punch")
 
 					if self.sounds and self.sounds.attack then
-						minetest.sound_play(self.sounds.attack, {object = self.object})
+						core.sound_play(self.sounds.attack, {object = self.object})
 					end
 
 					local p = self.object:get_pos()
 					p.y = p.y + (self.collisionbox[2]+self.collisionbox[5])/2
-					local obj = minetest.add_entity(p, self.arrow)
+					local obj = core.add_entity(p, self.arrow)
 					local amount = (vec.x^2+vec.y^2+vec.z^2)^0.5
 					local v = obj:get_luaentity().velocity
 					vec.y = vec.y+1
@@ -614,7 +614,7 @@ function whinny:register_mob(name, def)
 			self.object:set_velocity({x=0, y=self.object:get_velocity().y, z=0})
 			self.object:set_yaw(math.random(1, 360)/180*math.pi)
 
-			if self.type == "monster" and minetest.setting_getbool("only_peaceful_whinny") then
+			if self.type == "monster" and core.setting_getbool("only_peaceful_whinny") then
 				self.object:remove()
 			end
 
@@ -623,7 +623,7 @@ function whinny:register_mob(name, def)
 			end
 
 			if staticdata then
-				local tmp = minetest.deserialize(staticdata)
+				local tmp = core.deserialize(staticdata)
 				if tmp and tmp.lifetimer then
 					self.lifetimer = tmp.lifetimer - dtime_s
 				end
@@ -648,7 +648,7 @@ function whinny:register_mob(name, def)
 			}
 
 			self.object:set_properties(tmp)
-			return minetest.serialize(tmp)
+			return core.serialize(tmp)
 		end,
 
 		on_punch = function(self, hitter)
@@ -661,13 +661,13 @@ function whinny:register_mob(name, def)
 
 			if weapon:get_definition().sounds ~= nil then
 				local s = math.random(0,#weapon:get_definition().sounds)
-				minetest.sound_play(weapon:get_definition().sounds[s],
+				core.sound_play(weapon:get_definition().sounds[s],
 					{
 						object = hitter,
 					}
 				)
 			else
-				minetest.sound_play("default_sword_wood",
+				core.sound_play("default_sword_wood",
 					{
 						object = hitter,
 					}
@@ -684,14 +684,14 @@ function whinny:register_mob(name, def)
 					end
 
 					if self.sounds.death ~= nil then
-						minetest.sound_play(self.sounds.death,
+						core.sound_play(self.sounds.death,
 							{
 								object = self.object,
 							}
 						)
 					end
 
-					if minetest.get_modpath("skills") and minetest.get_modpath("experience") then
+					if core.get_modpath("skills") and core.get_modpath("experience") then
 						-- DROP experience
 						local distance_rating = ( ( get_distance({x=0,y=0,z=0},pos) ) / ( skills.get_player_level(hitter:get_player_name()).level * 1000 ) )
 						local emax = math.floor( self.exp_min + ( distance_rating * self.exp_max ) )
@@ -709,7 +709,7 @@ function whinny:register_mob(name, def)
 			if self.passive == false then
 				self.do_attack(self,hitter,1)
 				-- alert other NPCs to the attack
-				local inradius = minetest.get_objects_inside_radius(hitter:get_pos(),5)
+				local inradius = core.get_objects_inside_radius(hitter:get_pos(),5)
 
 				for _, oir in pairs(inradius) do
 					local obj = oir:get_luaentity()
@@ -743,7 +743,7 @@ function whinny:register_spawn(name, nodes, max_light, min_light, chance, active
 		chance = chance * 1
 	end
 
-	minetest.register_abm({
+	core.register_abm({
 		nodenames = nodes,
 		--neighbors = {"air"},
 		interval = 30,
@@ -757,52 +757,52 @@ function whinny:register_spawn(name, nodes, max_light, min_light, chance, active
 			p2.y = p2.y + 1
 			local p3 = p2
 			p3.y = p3.y + 1
-			if minetest.registered_nodes[minetest.get_node(p2).name].walkable == false or minetest.registered_nodes[minetest.get_node(p3).name].walkable == false then
+			if core.registered_nodes[core.get_node(p2).name].walkable == false or core.registered_nodes[core.get_node(p3).name].walkable == false then
 							return
 			end]]
 
 			pos.y = pos.y+1
 
-			if not minetest.get_node_light(pos) then return end
-			if minetest.get_node_light(pos) > max_light then return end
-			if minetest.get_node_light(pos) < min_light then return end
+			if not core.get_node_light(pos) then return end
+			if core.get_node_light(pos) > max_light then return end
+			if core.get_node_light(pos) < min_light then return end
 			if pos.y > max_height then return end
 
 			local get_node_pos
 			local get_node_pos_name
 			local registered_node
 
-			get_node_pos = minetest.get_node (pos)
+			get_node_pos = core.get_node (pos)
 			if get_node_pos == nil then return end
 
 			get_node_pos_name = get_node_pos.name
 			if get_node_pos_name == nil then return end
 
-			registered_node = minetest.registered_nodes [get_node_pos_name]
+			registered_node = core.registered_nodes [get_node_pos_name]
 			if registered_node == nil then return end
 
 			if registered_node.walkable == true or registered_node.walkable == nil then return end
 
 			pos.y = pos.y+1
 
-			get_node_pos = minetest.get_node (pos)
+			get_node_pos = core.get_node (pos)
 			if get_node_pos == nil then return end
 
 			get_node_pos_name = get_node_pos.name
 			if get_node_pos_name == nil then return end
 
-			registered_node = minetest.registered_nodes [get_node_pos_name]
+			registered_node = core.registered_nodes [get_node_pos_name]
 			if registered_node == nil then return end
 
 			if registered_node.walkable == true or registered_node.walkable == nil then return end
 
 			if spawn_func and not spawn_func(pos, node) then return end
 
-			if minetest.setting_getbool("display_mob_spawn") then
-				minetest.chat_send_all("[whinny] Add "..name.." at "..minetest.pos_to_string(pos))
+			if core.setting_getbool("display_mob_spawn") then
+				core.chat_send_all("[whinny] Add "..name.." at "..core.pos_to_string(pos))
 			end
 
-			local mob = minetest.add_entity(pos, name)
+			local mob = core.add_entity(pos, name)
 
 			-- setup the hp, armor, drops, etc... for this specific mob
 			local distance_rating = ( ( get_distance({x=0,y=0,z=0},pos) ) / 15000 )
@@ -817,7 +817,7 @@ function whinny:register_spawn(name, nodes, max_light, min_light, chance, active
 end
 
 function whinny:register_arrow(name, def)
-	minetest.register_entity(name, {
+	core.register_entity(name, {
 		physical = false,
 		visual = def.visual,
 		visual_size = def.visual_size,
@@ -828,13 +828,13 @@ function whinny:register_arrow(name, def)
 
 		on_step = function(self, dtime)
 			local pos = self.object:get_pos()
-			if minetest.get_node(self.object:get_pos()).name ~= "air" then
+			if core.get_node(self.object:get_pos()).name ~= "air" then
 				self.hit_node(self, pos, node)
 				self.object:remove()
 				return
 			end
 			pos.y = pos.y-1
-			for _,player in pairs(minetest.get_objects_inside_radius(pos, 1)) do
+			for _,player in pairs(core.get_objects_inside_radius(pos, 1)) do
 				if player:is_player() then
 					self.hit_player(self, player)
 					self.object:remove()
