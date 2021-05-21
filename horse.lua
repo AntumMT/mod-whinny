@@ -1,7 +1,15 @@
 
 local rot_compensate = 4.7
 
-local horse_likes = "farming:wheat"
+local horse_likes = {
+	"default:apple",
+	"farming:wheat",
+	"farming:barley",
+	"farming:oat",
+	"farming:carrot",
+	"farming:carrot_gold",
+	"farming:cucumber",
+}
 
 local function is_ground(pos)
 	local nn = core.get_node(pos).name
