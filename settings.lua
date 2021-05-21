@@ -14,3 +14,7 @@ whinny.display_spawn = core.settings:get_bool("display_mob_spawn", false) -- dep
 -- unique settings
 
 whinny.peaceful_only = core.settings:get_bool("whinny.peaceful_only", true)
+
+whinny.spawn_chance = tonumber(core.settings:get("whinny.spawn_chance") or 50000)
+
+whinny.spawn_height_max = tonumber(core.settings:get("whinny.spawn_height_max") or 100)
