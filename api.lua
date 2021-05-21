@@ -734,7 +734,7 @@ end
 
 whinny.spawning_whinny = {}
 
-function whinny:register_spawn(name, nodes, max_light, min_light, chance, active_object_count, max_height, spawn_func)
+function whinny:register_spawn(name, nodes, max_light, min_light, chance, active_object_count, min_height, max_height, spawn_func)
 	whinny.spawning_whinny[name] = true
 
 	-- RJK: Add this:
@@ -774,6 +774,7 @@ function whinny:register_spawn(name, nodes, max_light, min_light, chance, active
 			if core.get_node_light(pos) > max_light then return end
 			if core.get_node_light(pos) < min_light then return end
 			if pos.y > max_height then return end
+			if pos.y < min_height then return end
 
 			local get_node_pos
 			local get_node_pos_name

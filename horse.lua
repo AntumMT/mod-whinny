@@ -328,6 +328,9 @@ local spawn_nodes = {
 	"default:dirt_with_dry_grass",
 }
 
-whinny:register_spawn("whinny:horse_brown", spawn_nodes, 20, 6, whinny.spawn_chance, 1, whinny.spawn_height_max)
-whinny:register_spawn("whinny:horse_white", spawn_nodes, 20, 6, whinny.spawn_chance, 1, whinny.spawn_height_max)
-whinny:register_spawn("whinny:horse_black", spawn_nodes, 20, 6, whinny.spawn_chance, 1, whinny.spawn_height_max)
+whinny:register_spawn("whinny:horse_brown", spawn_nodes, 20, 6,
+	whinny.spawn_chance, 1, whinny.spawn_height_min, whinny.spawn_height_max)
+whinny:register_spawn("whinny:horse_white", spawn_nodes, 20, 6,
+	whinny.spawn_chance, 1, whinny.spawn_height_min, whinny.spawn_height_max)
+whinny:register_spawn("whinny:horse_black", spawn_nodes, 20, 6,
+	whinny.spawn_chance, 1, whinny.spawn_height_min, whinny.spawn_height_max)
