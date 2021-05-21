@@ -183,7 +183,10 @@ local function register_basehorse(name, craftitem, horse)
 			-- rotation (the faster we go, the less we rotate)
 			if whinny.enable_mouse_ctrl then
 				-- FIXME: turning should be gradual
-				self.object:set_yaw(self.driver:get_look_horizontal() - rot_compensate)
+				local driver_look = self.driver:get_look_horizontal()
+				if driver_look then
+					self.object:set_yaw(driver_look - rot_compensate)
+				end
 			else
 				if ctrl.left then
 					self.object:set_yaw(self.object:get_yaw()+2*(1.5-math.abs(self.speed/self.max_speed))*math.pi/90 +dtime*math.pi/90)
