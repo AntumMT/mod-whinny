@@ -359,9 +359,19 @@ local function register_basehorse(name, craftitem, horse)
 	end
 
 	function horse:on_punch(puncher, time_from_last_punch, tool_capabilities, direction)
-		-- don't do damage
-		-- FIXME: horse still flashes
-		if self.driver then return true end
+		if puncher:is_player() then
+			local pname = puncher:get_player_name()
+
+			-- don't allow owned horses to be killed or owned by other players
+			if self.owner and pname ~= self.owner then
+				core.chat_send_player(pname, "Don't kill " .. self.owner .. "'s horse!!!")
+				return true
+			end
+
+			-- don't damage your own horse while mounted
+			-- FIXME: horse still flashes
+			if self.driver then return true end
+		end
 
 		core.sound_play("player_damage", {object=self.object,})
 	end
