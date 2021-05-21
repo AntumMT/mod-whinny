@@ -27,6 +27,11 @@ end
 
 -- ===================================================================
 
+local horse_drops = {}
+if core.registered_items["mobs:meat_raw"] then
+	table.insert(horse_drops, {name="mobs:meat_raw", chance=1, min=2, max=3})
+end
+
 local function register_wildhorse (basename)
 	whinny:register_mob ("whinny:horse"..basename, {
 		type = "animal",
@@ -38,14 +43,7 @@ local function register_wildhorse (basename)
 			texture_1 = {"whinny_horse"..basename..".png"},
 		},
 		visual = "mesh",
-		drops = {
-			{
-				name = "whinny:meat_raw",
-				chance = 1,
-				min = 2,
-				max = 3,
-			},
-		},
+		drops = horse_drops,
 		mesh = "horsemob.x",
 		makes_footstep_sound = true,
 		walk_velocity = 1,
