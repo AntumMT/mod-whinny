@@ -1,0 +1,5 @@
+
+- whinny_apple_bite:
+  - author: sonicmariobrotha
+	- license: CC0
+	- link: https://freesound.org/people/sonicmariobrotha/sounds/333825/

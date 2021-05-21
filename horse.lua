@@ -111,6 +111,7 @@ local function register_wildhorse(color)
 				if not fills then fills = 1 end
 
 				self.appetite = self.appetite - fills
+				core.sound_play("whinny_apple_bite", {object=self.object})
 
 				if not whinny.creative then
 					item:take_item()
