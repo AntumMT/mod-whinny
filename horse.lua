@@ -327,4 +327,7 @@ for color, name in pairs({["brown"]="Brown Horse", ["white"]="White Horse", ["bl
 
 	whinny:register_spawn("whinny:horse_" .. color, spawn_nodes, 20, 6,
 		whinny.spawn_chance, 1, whinny.spawn_height_min, whinny.spawn_height_max)
+
+	-- to simplify item handling
+	core.register_alias("whinny:horse_" .. color, "whinny:horse_" .. color .. "_tame")
 end
