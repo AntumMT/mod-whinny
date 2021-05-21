@@ -67,7 +67,7 @@ function whinny:register_mob(name, def)
 		end,
 
 		set_velocity = function(self, v)
-			local yaw = self.object:getyaw()
+			local yaw = self.object:get_yaw()
 			if yaw then
 				if self.drawtype == "side" then
 					yaw = yaw+(math.pi/2)
@@ -75,18 +75,18 @@ function whinny:register_mob(name, def)
 
 				local x = math.sin(yaw) * -v
 				local z = math.cos(yaw) * v
-				self.object:setvelocity({x=x, y=self.object:getvelocity().y, z=z})
+				self.object:set_velocity({x=x, y=self.object:get_velocity().y, z=z})
 			end
 		end,
 
 		get_velocity = function(self)
-			local v = self.object:getvelocity()
+			local v = self.object:get_velocity()
 			return (v.x^2 + v.z^2)^(0.5)
 		end,
 
 		in_fov = function(self,pos)
 			-- checks if POS is in self's FOV
-			local yaw = self.object:getyaw()
+			local yaw = self.object:get_yaw()
 			if self.drawtype == "side" then
 				yaw = yaw+(math.pi/2)
 			end
@@ -169,7 +169,7 @@ function whinny:register_mob(name, def)
 			--if self.lifetimer <= 0 and not self.tamed and self.type ~= "npc" then
 			if self.lifetimer <= 0 and not self.tamed and self.name ~= "whinny:ent" then
 				local player_count = 0
-				for _,obj in ipairs(minetest.get_objects_inside_radius(self.object:getpos(), 10)) do
+				for _,obj in ipairs(minetest.get_objects_inside_radius(self.object:get_pos(), 10)) do
 					if obj:is_player() then
 						player_count = player_count+1
 					end
@@ -182,8 +182,8 @@ function whinny:register_mob(name, def)
 				end
 			end
 
-			if self.object:getvelocity().y > 0.1 then
-				local yaw = self.object:getyaw()
+			if self.object:get_velocity().y > 0.1 then
+				local yaw = self.object:get_yaw()
 				if self.drawtype == "side" then
 					yaw = yaw+(math.pi/2)
 				end
@@ -191,24 +191,24 @@ function whinny:register_mob(name, def)
 				local x = math.sin(yaw) * -2
 				local z = math.cos(yaw) * 2
 
-				if minetest.get_item_group(minetest.get_node(self.object:getpos()).name, "water") ~= 0 then
-					self.object:setacceleration({x = x, y = 1.5, z = z})
+				if minetest.get_item_group(minetest.get_node(self.object:get_pos()).name, "water") ~= 0 then
+					self.object:set_acceleration({x = x, y = 1.5, z = z})
 				else
-					self.object:setacceleration({x = x, y = -14.5, z = z})
+					self.object:set_acceleration({x = x, y = -14.5, z = z})
 				end
 			else
-				if minetest.get_item_group(minetest.get_node(self.object:getpos()).name, "water") ~= 0 then
-					self.object:setacceleration({x = 0, y = 1.5, z = 0})
+				if minetest.get_item_group(minetest.get_node(self.object:get_pos()).name, "water") ~= 0 then
+					self.object:set_acceleration({x = 0, y = 1.5, z = 0})
 				else
-					self.object:setacceleration({x = 0, y = -14.5, z = 0})
+					self.object:set_acceleration({x = 0, y = -14.5, z = 0})
 				end
 			end
 
-			if self.disable_fall_damage and self.object:getvelocity().y == 0 then
+			if self.disable_fall_damage and self.object:get_velocity().y == 0 then
 				if not self.old_y then
-					self.old_y = self.object:getpos().y
+					self.old_y = self.object:get_pos().y
 				else
-					local d = self.old_y - self.object:getpos().y
+					local d = self.old_y - self.object:get_pos().y
 					if d > 5 then
 						local damage = d-5
 						self.object:set_hp(self.object:get_hp()-damage)
@@ -217,7 +217,7 @@ function whinny:register_mob(name, def)
 						end
 					end
 
-					self.old_y = self.object:getpos().y
+					self.old_y = self.object:get_pos().y
 				end
 			end
 
@@ -233,7 +233,7 @@ function whinny:register_mob(name, def)
 			end
 
 			local do_env_damage = function(self)
-			local pos = self.object:getpos()
+			local pos = self.object:get_pos()
 			local n = minetest.get_node(pos)
 
 			if self.light_damage and self.light_damage ~= 0 and pos.y>0 and
@@ -274,7 +274,7 @@ function whinny:register_mob(name, def)
 			if ( self.type == "monster" or self.type == "barbarian" ) and
 					minetest.setting_getbool("enable_damage") and self.state ~= "attack" then
 
-				local s = self.object:getpos()
+				local s = self.object:get_pos()
 				local inradius = minetest.get_objects_inside_radius(s,self.view_range)
 				local player = nil
 				local type = nil
@@ -291,8 +291,8 @@ function whinny:register_mob(name, def)
 					end
 
 					if type == "player" or type == "npc" then
-						local s = self.object:getpos()
-						local p = player:getpos()
+						local s = self.object:get_pos()
+						local p = player:get_pos()
 						local sp = s
 						p.y = p.y + 1
 						sp.y = sp.y + 1         -- aim higher to make looking up hills more realistic
@@ -309,16 +309,16 @@ function whinny:register_mob(name, def)
 
 			-- NPC FIND A MONSTER TO ATTACK
 			if self.type == "npc" and self.attacks_monsters and self.state ~= "attack" then
-				local s = self.object:getpos()
+				local s = self.object:get_pos()
 				local inradius = minetest.get_objects_inside_radius(s,self.view_range)
 				for _, oir in pairs(inradius) do
 					local obj = oir:get_luaentity()
 					if obj then
 						if obj.type == "monster" or obj.type == "barbarian" then
 							-- attack monster
-							local p = obj.object:getpos()
+							local p = obj.object:get_pos()
 							local dist = ((p.x-s.x)^2 + (p.y-s.y)^2 + (p.z-s.z)^2)^0.5
-							print("attack monster at "..minetest.pos_to_string(obj.object:getpos()))
+							print("attack monster at "..minetest.pos_to_string(obj.object:get_pos()))
 							self.do_attack(self,obj.object,dist)
 							break
 						end
@@ -328,8 +328,8 @@ function whinny:register_mob(name, def)
 
 			if self.follow ~= "" and not self.following then
 				for _,player in pairs(minetest.get_connected_players()) do
-					local s = self.object:getpos()
-					local p = player:getpos()
+					local s = self.object:get_pos()
+					local p = player:get_pos()
 
 					if s and p then
 						local dist = ((p.x-s.x)^2 + (p.y-s.y)^2 + (p.z-s.z)^2)^0.5
@@ -345,8 +345,8 @@ function whinny:register_mob(name, def)
 				if self.following:get_wielded_item():get_name() ~= self.follow then
 					self.following = nil
 				else
-					local s = self.object:getpos()
-					local p = self.following:getpos()
+					local s = self.object:get_pos()
+					local p = self.following:get_pos()
 					local dist = ((p.x-s.x)^2 + (p.y-s.y)^2 + (p.z-s.z)^2)^0.5
 					if dist > self.view_range then
 						self.following = nil
@@ -360,16 +360,16 @@ function whinny:register_mob(name, def)
 						if p.x > s.x then
 							yaw = yaw+math.pi
 						end
-						self.object:setyaw(yaw)
+						self.object:set_yaw(yaw)
 						if dist > 2 then
 							if not self.v_start then
 								self.v_start = true
 								self.set_velocity(self, self.walk_velocity)
 							else
-								if self.jump and self.get_velocity(self) <= 1.5 and self.object:getvelocity().y == 0 then
-									local v = self.object:getvelocity()
+								if self.jump and self.get_velocity(self) <= 1.5 and self.object:get_velocity().y == 0 then
+									local v = self.object:get_velocity()
 									v.y = 6
-									self.object:setvelocity(v)
+									self.object:set_velocity(v)
 								end
 								self.set_velocity(self, self.walk_velocity)
 							end
@@ -390,14 +390,14 @@ function whinny:register_mob(name, def)
 				if math.random(1, 4) == 1 then
 					-- if there is a player nearby look at them
 					local lp = nil
-					local s = self.object:getpos()
+					local s = self.object:get_pos()
 					if self.type == "npc" then
-						local o = minetest.get_objects_inside_radius(self.object:getpos(), 3)
+						local o = minetest.get_objects_inside_radius(self.object:get_pos(), 3)
 
 						local yaw = 0
 						for _,o in ipairs(o) do
 							if o:is_player() then
-								lp = o:getpos()
+								lp = o:get_pos()
 								break
 							end
 						end
@@ -414,10 +414,10 @@ function whinny:register_mob(name, def)
 							yaw = yaw+math.pi
 						end
 					else
-						yaw = self.object:getyaw()+((math.random(0,360)-180)/180*math.pi)
+						yaw = self.object:get_yaw()+((math.random(0,360)-180)/180*math.pi)
 					end
 
-					self.object:setyaw(yaw)
+					self.object:set_yaw(yaw)
 				end
 
 				self.set_velocity(self, 0)
@@ -429,13 +429,13 @@ function whinny:register_mob(name, def)
 				end
 			elseif self.state == "walk" then
 				if math.random(1, 100) <= 30 then
-					self.object:setyaw(self.object:getyaw()+((math.random(0,360)-180)/180*math.pi))
+					self.object:set_yaw(self.object:get_yaw()+((math.random(0,360)-180)/180*math.pi))
 				end
 
-				if self.jump and self.get_velocity(self) <= 0.5 and self.object:getvelocity().y == 0 then
-					local v = self.object:getvelocity()
+				if self.jump and self.get_velocity(self) <= 0.5 and self.object:get_velocity().y == 0 then
+					local v = self.object:get_velocity()
 					v.y = 6
-					self.object:setvelocity(v)
+					self.object:set_velocity(v)
 				end
 
 				self:set_animation("walk")
@@ -447,15 +447,15 @@ function whinny:register_mob(name, def)
 					self:set_animation("stand")
 				end
 			elseif self.state == "attack" and self.attack_type == "dogfight" then
-				if not self.attack.player or not self.attack.player:getpos() then
+				if not self.attack.player or not self.attack.player:get_pos() then
 					print("stop attacking")
 					self.state = "stand"
 					self:set_animation("stand")
 					return
 				end
 
-				local s = self.object:getpos()
-				local p = self.attack.player:getpos()
+				local s = self.object:get_pos()
+				local p = self.attack.player:get_pos()
 				local dist = ((p.x-s.x)^2 + (p.y-s.y)^2 + (p.z-s.z)^2)^0.5
 
 				if dist > self.view_range or self.attack.player:get_hp() <= 0 then
@@ -479,16 +479,16 @@ function whinny:register_mob(name, def)
 					yaw = yaw+math.pi
 				end
 
-				self.object:setyaw(yaw)
+				self.object:set_yaw(yaw)
 				if self.attack.dist > 2 then
 					if not self.v_start then
 						self.v_start = true
 						self.set_velocity(self, self.run_velocity)
 					else
-						if self.jump and self.get_velocity(self) <= 0.5 and self.object:getvelocity().y == 0 then
-							local v = self.object:getvelocity()
+						if self.jump and self.get_velocity(self) <= 0.5 and self.object:get_velocity().y == 0 then
+							local v = self.object:get_velocity()
 							v.y = 6
-							self.object:setvelocity(v)
+							self.object:set_velocity(v)
 						end
 
 						self.set_velocity(self, self.run_velocity)
@@ -543,8 +543,8 @@ function whinny:register_mob(name, def)
 					return
 				end
 
-				local s = self.object:getpos()
-				local p = self.attack.player:getpos()
+				local s = self.object:get_pos()
+				local p = self.attack.player:get_pos()
 				p.y = p.y - .5
 				s.y = s.y + .5
 				local dist = ((p.x-s.x)^2 + (p.y-s.y)^2 + (p.z-s.z)^2)^0.5
@@ -575,7 +575,7 @@ function whinny:register_mob(name, def)
 								yaw = yaw+math.pi
 				end
 
-				self.object:setyaw(yaw)
+				self.object:set_yaw(yaw)
 				self.set_velocity(self, 0)
 
 				if self.timer > self.shoot_interval and math.random(1, 100) <= 60 then
@@ -587,7 +587,7 @@ function whinny:register_mob(name, def)
 						minetest.sound_play(self.sounds.attack, {object = self.object})
 					end
 
-					local p = self.object:getpos()
+					local p = self.object:get_pos()
 					p.y = p.y + (self.collisionbox[2]+self.collisionbox[5])/2
 					local obj = minetest.add_entity(p, self.arrow)
 					local amount = (vec.x^2+vec.y^2+vec.z^2)^0.5
@@ -596,23 +596,23 @@ function whinny:register_mob(name, def)
 					vec.x = vec.x*v/amount
 					vec.y = vec.y*v/amount
 					vec.z = vec.z*v/amount
-					obj:setvelocity(vec)
+					obj:set_velocity(vec)
 				end
 			end
 		end,
 
 		on_activate = function(self, staticdata, dtime_s)
 			-- reset HP
-			local pos = self.object:getpos()
+			local pos = self.object:get_pos()
 			local distance_rating = ( ( get_distance({x=0,y=0,z=0},pos) ) / 20000 )
 			local newHP = self.hp_min + math.floor( self.hp_max * distance_rating )
 			self.object:set_hp( newHP )
 
 			self.object:set_armor_groups({fleshy=self.armor})
-			self.object:setacceleration({x=0, y=-10, z=0})
+			self.object:set_acceleration({x=0, y=-10, z=0})
 			self.state = "stand"
-			self.object:setvelocity({x=0, y=self.object:getvelocity().y, z=0})
-			self.object:setyaw(math.random(1, 360)/180*math.pi)
+			self.object:set_velocity({x=0, y=self.object:get_velocity().y, z=0})
+			self.object:set_yaw(math.random(1, 360)/180*math.pi)
 
 			if self.type == "monster" and minetest.setting_getbool("only_peaceful_whinny") then
 				self.object:remove()
@@ -709,7 +709,7 @@ function whinny:register_mob(name, def)
 			if self.passive == false then
 				self.do_attack(self,hitter,1)
 				-- alert other NPCs to the attack
-				local inradius = minetest.get_objects_inside_radius(hitter:getpos(),5)
+				local inradius = minetest.get_objects_inside_radius(hitter:get_pos(),5)
 
 				for _, oir in pairs(inradius) do
 					local obj = oir:get_luaentity()
@@ -827,8 +827,8 @@ function whinny:register_arrow(name, def)
 		hit_node = def.hit_node,
 
 		on_step = function(self, dtime)
-			local pos = self.object:getpos()
-			if minetest.get_node(self.object:getpos()).name ~= "air" then
+			local pos = self.object:get_pos()
+			if minetest.get_node(self.object:get_pos()).name ~= "air" then
 				self.hit_node(self, pos, node)
 				self.object:remove()
 				return

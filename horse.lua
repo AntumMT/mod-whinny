@@ -69,7 +69,7 @@ local function register_wildhorse (basename)
 		on_rightclick = function(self, clicker)
 			local item = clicker:get_wielded_item()
 			if item:get_name() == "farming:wheat" then
-				minetest.add_entity (self.object:getpos(), "whinny:horse"..basename.."h1")
+				minetest.add_entity (self.object:get_pos(), "whinny:horse"..basename.."h1")
 					if not minetest.setting_getbool("creative_mode") then
 						item:take_item()
 						clicker:set_wielded_item(item)
@@ -133,13 +133,13 @@ local function register_basehorse(name, craftitem, horse)
 	end
 
 	function horse:on_step(dtime)
-		local p = self.object:getpos()
+		local p = self.object:get_pos()
 		p.y = p.y - 0.1
 		local on_ground = is_ground(p)
-		local inside_block = self.object:getpos()
+		local inside_block = self.object:get_pos()
 		inside_block.y = inside_block.y + 1
 
-		self.speed = get_speed(self.object:getvelocity())*get_sign(self.speed)
+		self.speed = get_speed(self.object:get_velocity())*get_sign(self.speed)
 
 		-- driver controls
 		if self.driver then
@@ -147,20 +147,20 @@ local function register_basehorse(name, craftitem, horse)
 
 			-- rotation (the faster we go, the less we rotate)
 			if ctrl.left then
-				self.object:setyaw(self.object:getyaw()+2*(1.5-math.abs(self.speed/self.max_speed))*math.pi/90 +dtime*math.pi/90)
+				self.object:set_yaw(self.object:get_yaw()+2*(1.5-math.abs(self.speed/self.max_speed))*math.pi/90 +dtime*math.pi/90)
 			end
 			if ctrl.right then
-				self.object:setyaw(self.object:getyaw()-2*(1.5-math.abs(self.speed/self.max_speed))*math.pi/90 -dtime*math.pi/90)
+				self.object:set_yaw(self.object:get_yaw()-2*(1.5-math.abs(self.speed/self.max_speed))*math.pi/90 -dtime*math.pi/90)
 			end
 			-- jumping (only if on ground)
 
 			if ctrl.jump then
 				if on_ground then
-					local v = self.object:getvelocity()
+					local v = self.object:get_velocity()
 					local vel = 3
 					--v.y = (self.jump_speed or 3)
 					v.y = vel
-					self.object:setvelocity(v)
+					self.object:set_velocity(v)
 				end
 			end
 
@@ -184,7 +184,7 @@ local function register_basehorse(name, craftitem, horse)
 		end
 
 		if math.abs(self.speed) < 1 then
-			self.object:setvelocity({x=0,y=0,z=0})
+			self.object:set_velocity({x=0,y=0,z=0})
 			self:set_animation(self.animation.mode_stand)
 		elseif self.speed > 5 then
 			self:set_animation(self.animation.mode_gallop)
@@ -203,44 +203,44 @@ local function register_basehorse(name, craftitem, horse)
 			end
 		end
 
-		local p = self.object:getpos()
+		local p = self.object:get_pos()
 		p.y = p.y+1
 		if not is_ground(p) then
 			if minetest.registered_nodes[minetest.get_node(p).name].walkable then
 				self.speed = 0
 			end
-			self.object:setacceleration({x=0, y=-10, z=0})
-			self.object:setvelocity(get_velocity(self.speed, self.object:getyaw(), self.object:getvelocity().y))
+			self.object:set_acceleration({x=0, y=-10, z=0})
+			self.object:set_velocity(get_velocity(self.speed, self.object:get_yaw(), self.object:get_velocity().y))
 		else
-			self.object:setacceleration({x=0, y=0, z=0})
+			self.object:set_acceleration({x=0, y=0, z=0})
 			-- falling
-			if math.abs(self.object:getvelocity().y) < 1 then
-				local pos = self.object:getpos()
+			if math.abs(self.object:get_velocity().y) < 1 then
+				local pos = self.object:get_pos()
 				pos.y = math.floor(pos.y)+0.5
-				self.object:setpos(pos)
-				self.object:setvelocity(get_velocity(self.speed, self.object:getyaw(), 0))
+				self.object:set_pos(pos)
+				self.object:set_velocity(get_velocity(self.speed, self.object:get_yaw(), 0))
 			else
-				self.object:setvelocity(get_velocity(self.speed, self.object:getyaw(), self.object:getvelocity().y))
+				self.object:set_velocity(get_velocity(self.speed, self.object:get_yaw(), self.object:get_velocity().y))
 			end
 		end
 
-		if self.object:getvelocity().y > 0.1 then
-				local yaw = self.object:getyaw()
+		if self.object:get_velocity().y > 0.1 then
+				local yaw = self.object:get_yaw()
 				if self.drawtype == "side" then
 						yaw = yaw+(math.pi/2)
 				end
 				local x = math.sin(yaw) * -2
 				local z = math.cos(yaw) * 2
 				if minetest.get_item_group(minetest.get_node(inside_block).name, "water") ~= 0 then
-						self.object:setacceleration({x = x, y = .1, z = z})
+						self.object:set_acceleration({x = x, y = .1, z = z})
 				else
-						self.object:setacceleration({x = x, y = -10, z = z})
+						self.object:set_acceleration({x = x, y = -10, z = z})
 				end
 		else
 				if minetest.get_item_group(minetest.get_node(inside_block).name, "water") ~= 0 then
-						self.object:setacceleration({x = 0, y = .1, z = 0})
+						self.object:set_acceleration({x = 0, y = .1, z = 0})
 				else
-						self.object:setacceleration({x = 0, y = -10, z = 0})
+						self.object:set_acceleration({x = 0, y = -10, z = 0})
 				end
 		end
 
@@ -257,7 +257,7 @@ local function register_basehorse(name, craftitem, horse)
 			self.driver = clicker
 			clicker:set_attach(self.object, "", {x=0,y=18,z=0}, {x=0,y=90,z=0})
 			clicker:set_eye_offset({x=0, y=8, z=0}, {x=0, y=0, z=0})
-			--self.object:setyaw(clicker:get_look_yaw())
+			--self.object:set_yaw(clicker:get_look_yaw())
 		end
 	end
 
