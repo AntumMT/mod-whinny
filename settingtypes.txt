@@ -1,0 +1,6 @@
+
+# If enabled, messages all players when spawned.
+display_mob_spawn (Display spawn) bool false
+
+# If disabled, whinny will attack players.
+only_peaceful_whinny (Only peaceful) bool true

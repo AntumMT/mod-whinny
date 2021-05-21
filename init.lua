@@ -4,6 +4,7 @@ whinny.modname = core.get_current_modname()
 whinny.modpath = core.get_modpath(whinny.modname)
 
 local scripts = {
+	"settings",
 	"api",
 	"horse",
 }
