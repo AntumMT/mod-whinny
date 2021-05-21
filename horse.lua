@@ -448,8 +448,13 @@ local function register_basehorse(name, craftitem, horse)
 				return true
 			end
 
+			local attach_y = 18
+			if core.features.object_independent_selectionbox then
+				attach_y = 10
+			end
+
 			self.driver = clicker
-			clicker:set_attach(self.object, "", {x=0,y=18,z=0}, {x=0,y=90,z=0})
+			clicker:set_attach(self.object, "", {x=0, y=attach_y, z=0}, {x=0, y=90, z=0})
 			clicker:set_eye_offset({x=0, y=8, z=0}, {x=0, y=0, z=0})
 			-- face same direction as horse
 			clicker:set_look_horizontal(self.object:get_yaw() + rot_compensate) -- FIXME: no idea why I need to add compensation
