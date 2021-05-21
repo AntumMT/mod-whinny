@@ -438,7 +438,8 @@ function whinny:register_mob(name, def)
 					end
 				end
 
-				if self.jump and self.get_velocity(self) <= 0.5 and self.object:get_velocity().y == 0 then
+				local vel = self.object:get_velocity()
+				if self.jump and self.get_velocity(self) <= 0.5 and vel and vel.y == 0 then
 					local v = self.object:get_velocity()
 					v.y = 6
 					self.object:set_velocity(v)
