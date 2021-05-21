@@ -68,13 +68,15 @@ function whinny:register_mob(name, def)
 
 		set_velocity = function(self, v)
 			local yaw = self.object:getyaw()
-			if self.drawtype == "side" then
-				yaw = yaw+(math.pi/2)
-			end
+			if yaw then
+				if self.drawtype == "side" then
+					yaw = yaw+(math.pi/2)
+				end
 
-			local x = math.sin(yaw) * -v
-			local z = math.cos(yaw) * v
-			self.object:setvelocity({x=x, y=self.object:getvelocity().y, z=z})
+				local x = math.sin(yaw) * -v
+				local z = math.cos(yaw) * v
+				self.object:setvelocity({x=x, y=self.object:getvelocity().y, z=z})
+			end
 		end,
 
 		get_velocity = function(self)
@@ -328,10 +330,13 @@ function whinny:register_mob(name, def)
 				for _,player in pairs(minetest.get_connected_players()) do
 					local s = self.object:getpos()
 					local p = player:getpos()
-					local dist = ((p.x-s.x)^2 + (p.y-s.y)^2 + (p.z-s.z)^2)^0.5
-					if self.view_range and dist < self.view_range then
-						self.following = player
-						break
+
+					if s and p then
+						local dist = ((p.x-s.x)^2 + (p.y-s.y)^2 + (p.z-s.z)^2)^0.5
+						if self.view_range and dist < self.view_range then
+							self.following = player
+							break
+						end
 					end
 				end
 			end
