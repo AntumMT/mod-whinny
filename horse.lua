@@ -22,6 +22,25 @@ for iname, fill in pairs(fill_values) do
 	end
 end
 
+local sounds = {
+	neigh = {
+		name = "whinny_horse_neigh_01",
+		gain = 1.0,
+	},
+	snort1 = {
+		name = "whinny_horse_snort_01",
+		gain = 1.0,
+	},
+	snort2 = {
+		name = "whinny_horse_snort_02",
+		gain = 1.0,
+	},
+	distress = {
+		name = "whinny_horse_neigh_02",
+		gain = 1.0,
+	},
+}
+
 
 local function is_ground(pos)
 	local nn = core.get_node(pos).name
@@ -78,7 +97,12 @@ local function register_wildhorse(color)
 		lava_damage = 5,
 		light_damage = 0,
 		sounds = {
-			random = "",
+			on_damage = sounds.distress,
+			on_death = sounds.snort2,
+			random = {
+				stand = sounds.snort1,
+				walk = sounds.neigh,
+			}
 		},
 		animation = {
 			speed_normal = 20,
@@ -252,6 +276,13 @@ local function register_basehorse(name, craftitem, horse)
 			else
 				self.speed = self.speed * 0.90
 			end
+
+			if self.sounds and self.sounds.random and math.random(1, 100) <= 1 then
+				local to_play = self.sounds.random.stand
+				if to_play then
+					core.sound_play(to_play.name, {object=self.object}, to_play.gain)
+				end
+			end
 		end
 
 		if math.abs(self.speed) < 1 then
@@ -374,6 +405,10 @@ local function register_basehorse(name, craftitem, horse)
 		end
 
 		core.sound_play("player_damage", {object=self.object,})
+		if self.sounds and self.sounds.on_damage then
+			core.sound_play(self.sounds.on_damage.name,
+				{object=self.object}, self.sounds.on_damage.gain)
+		end
 	end
 
 	core.register_entity(name, horse)
@@ -393,6 +428,14 @@ local function register_tamehorse(color, description)
 			visual_size = {x=1, y=1},
 			mesh = "horse.x",
 			textures = {"whinny_horse_" .. color .. "_mesh.png"},
+			sounds = {
+				on_damage = sounds.distress,
+				on_death = sounds.snort2,
+				random = {
+					stand = sounds.snort1,
+					walk = sounds.neigh,
+				}
+			},
 			animation = {
 				speed_normal = 20,
 				stand_start = 300,

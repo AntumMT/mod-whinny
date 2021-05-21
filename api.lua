@@ -241,7 +241,10 @@ function whinny:register_mob(name, def)
 			end
 
 			if self.sounds and self.sounds.random and math.random(1, 100) <= 1 then
-				core.sound_play(self.sounds.random, {object = self.object})
+				local to_play = self.sounds.random[self.state]
+				if to_play then
+					core.sound_play(to_play.name, {object=self.object}, to_play.gain)
+				end
 			end
 
 			local do_env_damage = function(self)
@@ -716,6 +719,11 @@ function whinny:register_mob(name, def)
 				)
 			end
 
+			if self.sounds and self.sounds.on_damage then
+				core.sound_play(self.sounds.on_damage.name,
+					{object=self.object}, self.sounds.on_damage.gain)
+			end
+
 			-- FIXME: drops not working because HP never <= 0
 			if self.object:get_hp() <= 0 then
 				if hitter and hitter:is_player() and hitter:get_inventory() then
@@ -726,12 +734,10 @@ function whinny:register_mob(name, def)
 						end
 					end
 
-					if self.sounds.death ~= nil then
-						core.sound_play(self.sounds.death,
-							{
-								object = self.object,
-							}
-						)
+					-- FIXME: doesn't work
+					if self.sounds.on_death ~= nil then
+						core.sound_play(self.sounds.on_death.name,
+							{object=self.object}, self.sounds.on_death.gain)
 					end
 
 					if core.get_modpath("skills") and core.get_modpath("experience") then

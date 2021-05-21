@@ -8,3 +8,5 @@
 - player faces same direction as horse after mounting
 - added setting to use mouse/look direction to control left/right turning (enabled by default)
 - horse can follow multiple items
+- added sounds for when damaged
+- added sounds for when in "walk" & "stand" states

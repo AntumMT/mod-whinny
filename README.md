@@ -10,8 +10,7 @@ A continuation of the [whinny][forum] mod for [Minetest], that adds tameable & r
 
 - Code: [MIT](LICENSE.txt)
 - Models & textures by sparky: CC0
-- Sounds:
-	- `whinny_apple_bite` by [sonicmariobrotha (CC0)](https://freesound.org/people/sonicmariobrotha/sounds/333825/)
+- Sounds: see [sounds/sources.txt](sounds/sources.txt)
 
 ### Links:
 
