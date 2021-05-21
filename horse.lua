@@ -1,6 +1,8 @@
 
 local rot_compensate = 4.7
 
+local horse_likes = "farming:wheat"
+
 local function is_ground(pos)
 	local nn = core.get_node(pos).name
 	return core.get_item_group(nn, "crumbly") ~= 0 or
@@ -64,11 +66,25 @@ local function register_wildhorse(color)
 			walk_start = 10,
 			walk_end = 60
 		},
-		follow = "farming:wheat",
+		follow = horse_likes,
 		view_range = 5,
 		on_rightclick = function(self, clicker)
 			local item = clicker:get_wielded_item()
-			if item:get_name() == "farming:wheat" then
+			local item_name = item:get_name()
+			local wants = false
+
+			if type(horse_likes) == "table" then
+				for _, i in ipairs(horse_likes) do
+					if i == item_name then
+						wants = true
+						break
+					end
+				end
+			else
+				wants = item_name == horse_likes
+			end
+
+			if wants then
 				core.add_entity(self.object:get_pos(), "whinny:horse_" .. color .. "_tame")
 					if not whinny.creative then
 						item:take_item()

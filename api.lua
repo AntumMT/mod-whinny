@@ -329,8 +329,17 @@ function whinny:register_mob(name, def)
 				end
 			end
 
-			if self.follow ~= "" and not self.following then
-				for _,player in pairs(core.get_connected_players()) do
+			local follow = false
+			local follow_multiple = type(self.follow) == "table"
+
+			if follow_multiple then
+				follow = #self.follow > 0
+			else
+				follow = self.follow ~= ""
+			end
+
+			if follow and not self.following then
+				for _, player in pairs(core.get_connected_players()) do
 					local s = self.object:get_pos()
 					local p = player:get_pos()
 
@@ -345,7 +354,21 @@ function whinny:register_mob(name, def)
 			end
 
 			if self.following and self.following:is_player() then
-				if self.following:get_wielded_item():get_name() ~= self.follow then
+				local wielded = self.following:get_wielded_item():get_name()
+				local likes_wielded = false
+
+				if follow_multiple then
+					for _, i in ipairs(self.follow) do
+						if i == wielded then
+							likes_wielded = true
+							break
+						end
+					end
+				else
+					likes_wielded = wielded == self.follow
+				end
+
+				if not likes_wielded then
 					self.following = nil
 				else
 					local s = self.object:get_pos()
