@@ -13,4 +13,4 @@ whinny.display_spawn = core.settings:get_bool("display_mob_spawn", false) -- dep
 
 -- unique settings
 
-whinny.peaceful_only = core.settings:get_bool("only_peaceful_whinny", true)
+whinny.peaceful_only = core.settings:get_bool("whinny.peaceful_only", true)

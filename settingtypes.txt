@@ -3,4 +3,4 @@
 display_mob_spawn (Display spawn) bool false
 
 # If disabled, whinny will attack players.
-only_peaceful_whinny (Only peaceful) bool true
+whinny.peaceful_only (Only peaceful) bool true
