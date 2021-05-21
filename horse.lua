@@ -119,8 +119,11 @@ local function register_wildhorse(color)
 				end
 
 				if self.appetite <= 0 then
+
 					-- replace with tamed horse
-					core.add_entity(self.object:get_pos(), "whinny:horse_" .. color .. "_tame")
+					core.add_entity(self.object:get_pos(),
+						"whinny:horse_" .. color .. "_tame",
+						core.serialize({owner=pname}))
 					self.object:remove()
 
 					core.chat_send_player(pname, "This horse is now tame!")
@@ -146,13 +149,16 @@ local function register_basehorse(name, craftitem, horse)
 	if craftitem ~= nil then
 		function craftitem.on_place(itemstack, placer, pointed_thing)
 			if pointed_thing.above then
-				core.add_entity(pointed_thing.above, name)
+				core.add_entity(pointed_thing.above, name, core.serialize({owner=placer:get_player_name()}))
+
 				if not whinny.creative then
 					itemstack:take_item()
 				end
 			end
+
 			return itemstack
 		end
+
 		core.register_craftitem(name, craftitem)
 	end
 
@@ -318,6 +324,12 @@ local function register_basehorse(name, craftitem, horse)
 			clicker:set_detach()
 			clicker:set_eye_offset({x=0, y=0, z=0}, {x=0, y=0, z=0})
 		elseif not self.driver then
+			local pname = clicker:get_player_name()
+			if self.owner and self.owner ~= pname then
+				core.chat_send_player(pname, "You cannot ride " .. self.owner .. "'s horse")
+				return true
+			end
+
 			self.driver = clicker
 			clicker:set_attach(self.object, "", {x=0,y=18,z=0}, {x=0,y=90,z=0})
 			clicker:set_eye_offset({x=0, y=8, z=0}, {x=0, y=0, z=0})
@@ -329,12 +341,21 @@ local function register_basehorse(name, craftitem, horse)
 	function horse:on_activate(staticdata, dtime_s)
 		self.object:set_armor_groups({fleshy=100})
 		if staticdata then
-				self.speed = tonumber(staticdata)
+			local data = core.deserialize(staticdata)
+			if data then
+				self.speed = data.speed
+				self.owner = data.owner
+			end
 		end
 	end
 
 	function horse:get_staticdata()
-		return tostring(self.speed)
+		local data = {
+			speed = self.speed,
+			owner = self.owner,
+		}
+
+		return core.serialize(data)
 	end
 
 	function horse:on_punch(puncher, time_from_last_punch, tool_capabilities, direction)

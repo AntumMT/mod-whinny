@@ -4,4 +4,4 @@ TODO:
 - add localization support
 - fix player position on horse
 - make turning gradual when using mouse control
-- only allow owners to ride
+- fix tame horse sound when hit
