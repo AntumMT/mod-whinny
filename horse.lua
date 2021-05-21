@@ -32,15 +32,15 @@ if core.registered_items["mobs:meat_raw"] then
 	table.insert(horse_drops, {name="mobs:meat_raw", chance=1, min=2, max=3})
 end
 
-local function register_wildhorse(basename)
-	whinny:register_mob("whinny:horse"..basename, {
+local function register_wildhorse(color)
+	whinny:register_mob("whinny:horse_" .. color, {
 		type = "animal",
 		hp_min = 10,
 		hp_max = 10,
 		collisionbox = {-.5, -0.01, -.5, .5, 1.4, .5},
 		available_textures = {
 			total = 1,
-			texture_1 = {"whinny_horse"..basename..".png"},
+			texture_1 = {"whinny_horse_" .. color .. "_mesh.png"},
 		},
 		visual = "mesh",
 		drops = horse_drops,
@@ -67,7 +67,7 @@ local function register_wildhorse(basename)
 		on_rightclick = function(self, clicker)
 			local item = clicker:get_wielded_item()
 			if item:get_name() == "farming:wheat" then
-				core.add_entity(self.object:get_pos(), "whinny:horse"..basename.."h1")
+				core.add_entity(self.object:get_pos(), "whinny:horse_" .. color .. "_tame")
 					if not whinny.creative then
 						item:take_item()
 						clicker:set_wielded_item(item)
@@ -280,11 +280,11 @@ local function register_basehorse(name, craftitem, horse)
 	core.register_entity(name, horse)
 end
 
-local function register_tamehorse(basename, description)
-	register_basehorse("whinny:horse"..basename.."h1",
+local function register_tamehorse(color, description)
+	register_basehorse("whinny:horse_" .. color .. "_tame",
 		{
 			description = description,
-			inventory_image = "whinny_horse"..basename.."_inventory.png",
+			inventory_image = "whinny_horse_" .. color .. "_inv.png",
 		},
 		{
 			physical = true,
@@ -293,7 +293,7 @@ local function register_tamehorse(basename, description)
 			stepheight = 1.1,
 			visual_size = {x=1, y=1},
 			mesh = "horse.x",
-			textures = {"whinny_horse"..basename..".png"},
+			textures = {"whinny_horse_" .. color .. "_mesh.png"},
 			animation = {
 				speed_normal = 20,
 				stand_start = 300,
@@ -316,18 +316,18 @@ local function register_tamehorse(basename, description)
 	)
 end
 
-register_tamehorse("", "Brown Horse")
-register_wildhorse("")
-register_tamehorse("peg", "White Horse")
-register_wildhorse("peg")
-register_tamehorse("ara", "Black Horse")
-register_wildhorse("ara")
+register_tamehorse("brown", "Brown Horse")
+register_wildhorse("brown")
+register_tamehorse("white", "White Horse")
+register_wildhorse("white")
+register_tamehorse("black", "Black Horse")
+register_wildhorse("black")
 
 local spawn_nodes = {
 	"default:dirt_with_grass",
 	"default:dirt_with_dry_grass",
 }
 
-whinny:register_spawn("whinny:horse", spawn_nodes, 20, 6, 50000, 1, 100)
-whinny:register_spawn("whinny:horsepeg", spawn_nodes, 20, 6, 50000, 1, 100)
-whinny:register_spawn("whinny:horseara", spawn_nodes, 20, 6, 50000, 1, 100)
+whinny:register_spawn("whinny:horse_brown", spawn_nodes, 20, 6, 50000, 1, 100)
+whinny:register_spawn("whinny:horse_white", spawn_nodes, 20, 6, 50000, 1, 100)
+whinny:register_spawn("whinny:horse_black", spawn_nodes, 20, 6, 50000, 1, 100)
