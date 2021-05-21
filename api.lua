@@ -74,8 +74,16 @@ function whinny:register_mob(name, def)
 				end
 
 				local x = math.sin(yaw) * -v
+				local y = self.object:get_velocity().y
 				local z = math.cos(yaw) * v
-				self.object:set_velocity({x=x, y=self.object:get_velocity().y, z=z})
+
+				for _, coord in ipairs({x, y, z}) do
+					if core.is_nan(coord) then
+						coord = 0
+					end
+				end
+
+				self.object:set_velocity({x=x, y=y, z=z})
 			end
 		end,
 
