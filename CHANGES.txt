@@ -5,3 +5,4 @@
 - renamed horses
 - added settings for min/max spawn height & spawn chance
 - changed setting "only_peaceful_whinny" to "whinny.peaceful_only"
+- player faces same direction as horse after mounting

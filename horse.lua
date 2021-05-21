@@ -1,4 +1,6 @@
 
+local rot_compensate = 4.7
+
 local function is_ground(pos)
 	local nn = core.get_node(pos).name
 	return core.get_item_group(nn, "crumbly") ~= 0 or
@@ -254,7 +256,8 @@ local function register_basehorse(name, craftitem, horse)
 			self.driver = clicker
 			clicker:set_attach(self.object, "", {x=0,y=18,z=0}, {x=0,y=90,z=0})
 			clicker:set_eye_offset({x=0, y=8, z=0}, {x=0, y=0, z=0})
-			--self.object:set_yaw(clicker:get_look_yaw())
+			-- face same direction as horse
+			clicker:set_look_horizontal(self.object:get_yaw() + rot_compensate) -- FIXME: no idea why I need to add compensation
 		end
 	end
 
