@@ -1,0 +1,7 @@
+
+1.0
+- forked from original whinny mod
+- updated for 0.4.16/5.x Minetest
+- renamed horses
+- added settings for min/max spawn height & spawn chance
+- changed setting "only_peaceful_whinny" to "whinny.peaceful_only"
