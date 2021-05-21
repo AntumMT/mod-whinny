@@ -340,7 +340,7 @@ local function register_basehorse(name, craftitem, horse)
 			if self.sounds and self.sounds.random and math.random(1, 100) <= 1 then
 				local to_play = self.sounds.random.stand
 				if to_play then
-					core.sound_play(to_play.name, {object=self.object}, to_play.gain)
+					core.sound_play(to_play.name, {object=self.object, to_play.gain})
 				end
 			end
 		end
@@ -474,7 +474,7 @@ local function register_basehorse(name, craftitem, horse)
 		core.sound_play("player_damage", {object=self.object,})
 		if self.sounds and self.sounds.on_damage then
 			core.sound_play(self.sounds.on_damage.name,
-				{object=self.object}, self.sounds.on_damage.gain)
+				{object=self.object, self.sounds.on_damage.gain})
 		end
 	end
 
