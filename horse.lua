@@ -42,6 +42,12 @@ local sounds = {
 }
 
 
+-- galloping sounds
+local function handle_is_playing(handle)
+	return handle > -1
+end
+
+
 local function is_ground(pos)
 	local nn = core.get_node(pos).name
 	return core.get_item_group(nn, "crumbly") ~= 0 or
@@ -219,6 +225,35 @@ local function register_basehorse(name, craftitem, horse)
 		end
 	end
 
+	-- sounds played while riding
+	horse.gallop_handle_1 = -1
+	horse.gallop_handle_2 = -1
+
+	function horse:stop_gallop()
+		if self.gallop_handle_1 > -1 then
+			core.sound_stop(self.gallop_handle_1)
+			self.gallop_handle_1 = -1
+		end
+
+		if self.gallop_handle_2 > -1 then
+			core.sound_stop(self.gallop_handle_2)
+			self.gallop_handle_2 = -1
+		end
+
+		return self.gallop_handle_1 < 0 and self.gallop_handle_2 < 0
+	end
+
+	function horse:start_gallop(stage)
+		local to_play = "whinny_gallop_0" .. tostring(stage)
+		if stage == 1 and self.gallop_handle_1 < 0 then
+			self.gallop_handle_1 = core.sound_play(to_play, {object=self.object, loop=true})
+			return self.gallop_handle_1 >= 0
+		elseif stage == 2 and self.gallop_handle_2 < 0 then
+			self.gallop_handle_2 = core.sound_play(to_play, {object=self.object, loop=true})
+			return self.gallop_handle_2 >= 0
+		end
+	end
+
 	function horse:on_step(dtime)
 		local p = self.object:get_pos()
 		p.y = p.y - 0.1
@@ -229,6 +264,31 @@ local function register_basehorse(name, craftitem, horse)
 		self.speed = get_speed(self.object:get_velocity())*get_sign(self.speed)
 
 		if self.driver then
+			-- galloping sounds
+			if self.speed > 5 then
+				if handle_is_playing(self.gallop_handle_1) then self:stop_gallop() end
+
+				if not handle_is_playing(self.gallop_handle_2) then
+					if not self:start_gallop(2) then
+						whinny.log("warning", "Failed to start gallop stage 2 sound")
+					end
+				end
+			elseif self.speed > 1 then
+				if handle_is_playing(self.gallop_handle_2) then self:stop_gallop() end
+
+				if not handle_is_playing(self.gallop_handle_1) then
+					if not self:start_gallop(1) then
+						whinny.log("warning", "Failed to start gallop stage 1 sound")
+					end
+				end
+			else
+				if handle_is_playing(self.gallop_handle_1) or handle_is_playing(self.gallop_handle_2) then
+					if not self:stop_gallop() then
+						whinny.log("warning", "Failed to stop gallop sounds")
+					end
+				end
+			end
+
 			-- driver controls
 			local ctrl = self.driver:get_player_control()
 
@@ -354,6 +414,13 @@ local function register_basehorse(name, craftitem, horse)
 			self.driver = nil
 			clicker:set_detach()
 			clicker:set_eye_offset({x=0, y=0, z=0}, {x=0, y=0, z=0})
+
+			-- stop galloping sounds
+			if handle_is_playing(self.gallop_handle_1) or handle_is_playing(self.gallop_handle_2) then
+				if not self:stop_gallop() then
+					whinny.log("warning", "Failed to stop gallop sounds")
+				end
+			end
 		elseif not self.driver then
 			local pname = clicker:get_player_name()
 			if self.owner and self.owner ~= pname then

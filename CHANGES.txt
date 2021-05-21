@@ -10,3 +10,4 @@
 - horse can follow multiple items
 - added sounds for when damaged
 - added sounds for when in "walk" & "stand" states
+- added galloping sounds while riding

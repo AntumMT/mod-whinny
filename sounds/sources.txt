@@ -4,6 +4,16 @@
 	- license: CC0
 	- link: https://freesound.org/people/sonicmariobrotha/sounds/333825/
 
+- whinny_gallop_01:
+	- author: Alan McKinney (alanmcki)
+	- license: CC BY 3.0
+	- link: https://freesound.org/people/alanmcki/sounds/403026/
+
+- whinny_gallop_02:
+	- author: Alan McKinney (alanmcki)
+	- license: CC BY 3.0
+	- link: https://freesound.org/people/alanmcki/sounds/403025/
+
 - whinny_horse_neigh_01:
   - author: GoodListener
   - license: CC BY 3.0
