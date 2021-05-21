@@ -141,19 +141,24 @@ local function register_basehorse(name, craftitem, horse)
 
 		self.speed = get_speed(self.object:get_velocity())*get_sign(self.speed)
 
-		-- driver controls
 		if self.driver then
+			-- driver controls
 			local ctrl = self.driver:get_player_control()
 
 			-- rotation (the faster we go, the less we rotate)
-			if ctrl.left then
-				self.object:set_yaw(self.object:get_yaw()+2*(1.5-math.abs(self.speed/self.max_speed))*math.pi/90 +dtime*math.pi/90)
+			if whinny.enable_mouse_ctrl then
+				-- FIXME: turning should be gradual
+				self.object:set_yaw(self.driver:get_look_horizontal() - rot_compensate)
+			else
+				if ctrl.left then
+					self.object:set_yaw(self.object:get_yaw()+2*(1.5-math.abs(self.speed/self.max_speed))*math.pi/90 +dtime*math.pi/90)
+				end
+				if ctrl.right then
+					self.object:set_yaw(self.object:get_yaw()-2*(1.5-math.abs(self.speed/self.max_speed))*math.pi/90 -dtime*math.pi/90)
+				end
 			end
-			if ctrl.right then
-				self.object:set_yaw(self.object:get_yaw()-2*(1.5-math.abs(self.speed/self.max_speed))*math.pi/90 -dtime*math.pi/90)
-			end
-			-- jumping (only if on ground)
 
+			-- jumping (only if on ground)
 			if ctrl.jump then
 				if on_ground then
 					local v = self.object:get_velocity()

@@ -20,3 +20,5 @@ whinny.spawn_chance = tonumber(core.settings:get("whinny.spawn_chance") or 50000
 whinny.spawn_height_min = tonumber(core.settings:get("whinny.spawn_height_min") or -500)
 
 whinny.spawn_height_max = tonumber(core.settings:get("whinny.spawn_height_max") or 500)
+
+whinny.enable_mouse_ctrl = core.settings:get_bool("whinny.enable_mouse_ctrl", true)
