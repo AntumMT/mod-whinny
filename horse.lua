@@ -423,6 +423,26 @@ local function register_basehorse(name, craftitem, horse)
 			end
 		elseif not self.driver then
 			local pname = clicker:get_player_name()
+
+			local wielded = clicker:get_wielded_item():get_name()
+			-- FIXME: use other items if "mobs:lasso" not available (or any item named "lasso")
+			if wielded == "mobs:lasso" then
+				if self.owner and self.owner ~= pname then
+					core.chat_send_player(pname, "You cannot take " .. self.owner .. "'s horse")
+				else
+					local inv = clicker:get_inventory()
+					local stack = ItemStack(self.name)
+					if not inv:room_for_item("main", stack) then
+						core.chat_send_player(pname, "You do not have room in your inventory")
+					else
+						inv:add_item("main", stack)
+						self.object:remove()
+					end
+				end
+
+				return true
+			end
+
 			if self.owner and self.owner ~= pname then
 				core.chat_send_player(pname, "You cannot ride " .. self.owner .. "'s horse")
 				return true
