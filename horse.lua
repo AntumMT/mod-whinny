@@ -322,6 +322,6 @@ register_wildhorse("ara")
 
 --function whinny:register_spawn(name, nodes, max_light, min_light, chance, active_object_count, max_height, spawn_func)
 
-whinny:register_spawn("whinny:horse","default:dirt_with_grass",20, 6, 50000, 1, 100)
-whinny:register_spawn("whinny:horsepeg","default:dirt_with_dry_grass",20, 6, 50000, 1, 100)
-whinny:register_spawn("whinny:horseara","default:dirt_with_grass",20, 6, 50000, 1, 100)
+whinny:register_spawn("whinny:horse", "default:dirt_with_grass", 20, 6, 50000, 1, 100)
+whinny:register_spawn("whinny:horsepeg", "default:dirt_with_dry_grass", 20, 6, 50000, 1, 100)
+whinny:register_spawn("whinny:horseara", "default:dirt_with_grass", 20, 6, 50000, 1, 100)
