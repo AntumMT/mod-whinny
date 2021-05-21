@@ -1,5 +1,17 @@
-dofile(core.get_modpath("whinny").."/api.lua")
-dofile(core.get_modpath("whinny").."/horse.lua")
+
+whinny = {}
+whinny.modname = core.get_current_modname()
+whinny.modpath = core.get_modpath(whinny.modname)
+
+local scripts = {
+	"api",
+	"horse",
+}
+
+for _, script in ipairs(scripts) do
+	dofile(whinny.modpath .. "/" .. script .. ".lua")
+end
+
 
 core.register_craftitem("whinny:meat", {
 	description = "Cooked Meat",

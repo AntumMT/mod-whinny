@@ -1,5 +1,4 @@
 
-whinny = {}
 local yaw = {}
 
 function whinny:register_mob(name, def)
