@@ -87,7 +87,7 @@ local function register_basehorse(name, craftitem, horse)
 	if craftitem ~= nil then
 		function craftitem.on_place(itemstack, placer, pointed_thing)
 			if pointed_thing.above then
-				core.env:add_entity(pointed_thing.above, name)
+				core.add_entity(pointed_thing.above, name)
 				if not whinny.creative then
 					itemstack:take_item()
 				end
