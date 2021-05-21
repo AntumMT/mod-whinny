@@ -80,7 +80,11 @@ function whinny:register_mob(name, def)
 
 		get_velocity = function(self)
 			local v = self.object:get_velocity()
-			return (v.x^2 + v.z^2)^(0.5)
+			if v then
+				return (v.x^2 + v.z^2)^(0.5)
+			end
+
+			return 0.0
 		end,
 
 		in_fov = function(self,pos)
@@ -428,7 +432,10 @@ function whinny:register_mob(name, def)
 				end
 			elseif self.state == "walk" then
 				if math.random(1, 100) <= 30 then
-					self.object:set_yaw(self.object:get_yaw()+((math.random(0,360)-180)/180*math.pi))
+					local yaw = self.object:get_yaw()
+					if yaw then
+						self.object:set_yaw(yaw + ((math.random(0,360)-180)/180*math.pi))
+					end
 				end
 
 				if self.jump and self.get_velocity(self) <= 0.5 and self.object:get_velocity().y == 0 then
