@@ -417,7 +417,10 @@ function whinny:register_mob(name, def)
 							yaw = yaw+math.pi
 						end
 					else
-						yaw = self.object:get_yaw()+((math.random(0,360)-180)/180*math.pi)
+						yaw = self.object:get_yaw()
+						if yaw then
+							yaw = yaw + ((math.random(0,360)-180)/180*math.pi)
+						end
 					end
 
 					self.object:set_yaw(yaw)
