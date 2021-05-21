@@ -52,9 +52,9 @@ local function register_wildhorse(basename)
 		water_damage = 1,
 		lava_damage = 5,
 		light_damage = 0,
-		 sounds = {
-				random = "",
-		 },
+		sounds = {
+			random = "",
+		},
 		animation = {
 			speed_normal = 20,
 			stand_start = 300,
@@ -76,7 +76,7 @@ local function register_wildhorse(basename)
 			end
 		end,
 		jump = true,
-		step=1,
+		step = 1,
 		passive = true,
 	})
 end
@@ -241,7 +241,6 @@ local function register_basehorse(name, craftitem, horse)
 						self.object:set_acceleration({x = 0, y = -10, z = 0})
 				end
 		end
-
 	end
 
 	function horse:on_rightclick(clicker)
@@ -282,35 +281,39 @@ local function register_basehorse(name, craftitem, horse)
 end
 
 local function register_tamehorse(basename, description)
-	register_basehorse("whinny:horse"..basename.."h1", {
-		description = description,
-		inventory_image = "whinny_horse"..basename.."_inventory.png",},{
-		physical = true,
-		collisionbox = {-.5, -0.01, -.5, .5, 1.4, .5},
-		visual = "mesh",
-		stepheight = 1.1,
-		visual_size = {x=1,y=1},
-		mesh = "horse.x",
-		textures = {"whinny_horse"..basename..".png"},
-		animation = {
-			speed_normal = 20,
-			stand_start = 300,
-			stand_end = 460,
-			walk_start = 10,
-			walk_end = 59,
-			gallop_start = 70,
-			gallop_end = 119,
-			mode_stand = 1,
-			mode_walk = 2,
-			mode_gallop = 3,
+	register_basehorse("whinny:horse"..basename.."h1",
+		{
+			description = description,
+			inventory_image = "whinny_horse"..basename.."_inventory.png",
 		},
-		animation_current = 0,
-		max_speed = 7,
-		forward_boost = .2,
-		jump_boost = 4,
-		speed = 0,
-		driver = nil,
-	})
+		{
+			physical = true,
+			collisionbox = {-.5, -0.01, -.5, .5, 1.4, .5},
+			visual = "mesh",
+			stepheight = 1.1,
+			visual_size = {x=1, y=1},
+			mesh = "horse.x",
+			textures = {"whinny_horse"..basename..".png"},
+			animation = {
+				speed_normal = 20,
+				stand_start = 300,
+				stand_end = 460,
+				walk_start = 10,
+				walk_end = 59,
+				gallop_start = 70,
+				gallop_end = 119,
+				mode_stand = 1,
+				mode_walk = 2,
+				mode_gallop = 3,
+			},
+			animation_current = 0,
+			max_speed = 7,
+			forward_boost = .2,
+			jump_boost = 4,
+			speed = 0,
+			driver = nil,
+		}
+	)
 end
 
 register_tamehorse("", "Brown Horse")
@@ -319,8 +322,6 @@ register_tamehorse("peg", "White Horse")
 register_wildhorse("peg")
 register_tamehorse("ara", "Black Horse")
 register_wildhorse("ara")
-
---function whinny:register_spawn(name, nodes, max_light, min_light, chance, active_object_count, max_height, spawn_func)
 
 local spawn_nodes = {
 	"default:dirt_with_grass",
