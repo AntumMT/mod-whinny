@@ -316,21 +316,15 @@ local function register_tamehorse(color, description)
 	)
 end
 
-register_tamehorse("brown", "Brown Horse")
-register_wildhorse("brown")
-register_tamehorse("white", "White Horse")
-register_wildhorse("white")
-register_tamehorse("black", "Black Horse")
-register_wildhorse("black")
-
 local spawn_nodes = {
 	"default:dirt_with_grass",
 	"default:dirt_with_dry_grass",
 }
 
-whinny:register_spawn("whinny:horse_brown", spawn_nodes, 20, 6,
-	whinny.spawn_chance, 1, whinny.spawn_height_min, whinny.spawn_height_max)
-whinny:register_spawn("whinny:horse_white", spawn_nodes, 20, 6,
-	whinny.spawn_chance, 1, whinny.spawn_height_min, whinny.spawn_height_max)
-whinny:register_spawn("whinny:horse_black", spawn_nodes, 20, 6,
-	whinny.spawn_chance, 1, whinny.spawn_height_min, whinny.spawn_height_max)
+for color, name in pairs({["brown"]="Brown Horse", ["white"]="White Horse", ["black"]="Black Horse",}) do
+	register_tamehorse(color, name)
+	register_wildhorse(color)
+
+	whinny:register_spawn("whinny:horse_" .. color, spawn_nodes, 20, 6,
+		whinny.spawn_chance, 1, whinny.spawn_height_min, whinny.spawn_height_max)
+end
