@@ -363,7 +363,13 @@ local function register_basehorse(name, craftitem, horse)
 			self.driver:set_detach()
 			self.driver:set_eye_offset({x=0, y=0, z=0}, {x=0, y=0, z=0})
 			self.driver = nil
+
+			-- don't do damage
+			-- FIXME: horse still flashes
+			return true
 		end
+
+		core.sound_play("player_damage", {object=self.object,})
 	end
 
 	core.register_entity(name, horse)
