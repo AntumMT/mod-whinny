@@ -174,6 +174,7 @@ function whinny:register_mob(name, def)
 		on_step = function(self, dtime)
 			if self.type == "monster" and whinny.peaceful_only then
 				self.object:remove()
+				return
 			end
 
 			self.lifetimer = self.lifetimer - dtime
@@ -696,27 +697,22 @@ function whinny:register_mob(name, def)
 			return core.serialize(tmp)
 		end,
 
-		on_punch = function(self, hitter)
-			local weapon = hitter:get_wielded_item()
+		on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir, damage)
+			-- do damage
+			self.object:set_hp(self.object:get_hp() - damage)
+
+			local weapon = puncher:get_wielded_item()
 			if weapon:get_definition().tool_capabilities ~= nil then
 				local wear = ( weapon:get_definition().tool_capabilities.full_punch_interval / 75 ) * 9000
 				weapon:add_wear(wear)
-				hitter:set_wielded_item(weapon)
+				puncher:set_wielded_item(weapon)
 			end
 
 			if weapon:get_definition().sounds ~= nil then
 				local s = math.random(0,#weapon:get_definition().sounds)
-				core.sound_play(weapon:get_definition().sounds[s],
-					{
-						object = hitter,
-					}
-				)
+				core.sound_play(weapon:get_definition().sounds[s], {object=puncher,})
 			else
-				core.sound_play("player_damage",
-					{
-						object = hitter,
-					}
-				)
+				core.sound_play("player_damage", {object=puncher,})
 			end
 
 			if self.sounds and self.sounds.on_damage then
@@ -724,51 +720,26 @@ function whinny:register_mob(name, def)
 					{object=self.object, self.sounds.on_damage.gain})
 			end
 
-			-- FIXME: drops not working because HP never <= 0
 			if self.object:get_hp() <= 0 then
-				if hitter and hitter:is_player() and hitter:get_inventory() then
+				if self.sounds.on_death ~= nil then
+					core.sound_play(self.sounds.on_death.name,
+						{object=self.object, self.sounds.on_death.gain})
+				end
+
+				local pos = self.object:get_pos()
+				self.object:remove()
+
+				if self.drops then
 					for _, drop in ipairs(self.drops) do
 						if math.random(1, drop.chance) == 1 then
 							core.add_item(pos, drop.name .. " "
 								.. tostring(math.random(drop.min, drop.max)))
 						end
 					end
-
-					-- FIXME: doesn't work
-					if self.sounds.on_death ~= nil then
-						core.sound_play(self.sounds.on_death.name,
-							{object=self.object, self.sounds.on_death.gain})
-					end
-
-					if core.get_modpath("skills") and core.get_modpath("experience") then
-						-- DROP experience
-						local distance_rating = ( ( get_distance({x=0,y=0,z=0},pos) ) / ( skills.get_player_level(hitter:get_player_name()).level * 1000 ) )
-						local emax = math.floor( self.exp_min + ( distance_rating * self.exp_max ) )
-						local expGained = math.random(self.exp_min, emax)
-						skills.add_exp(hitter:get_player_name(),expGained)
-						local expStack = experience.exp_to_items(expGained)
-
-						for _,stack in ipairs(expStack) do
-							default.drop_item(pos,stack)
-						end
-					end
 				end
 			end
 
-			if self.passive == false then
-				self.do_attack(self,hitter,1)
-				-- alert other NPCs to the attack
-				local inradius = core.get_objects_inside_radius(hitter:get_pos(),5)
-
-				for _, oir in pairs(inradius) do
-					local obj = oir:get_luaentity()
-					if obj then
-						if obj.group_attack == true and obj.state ~= "attack" then
-							obj.do_attack(obj,hitter,1)
-						end
-					end
-				end
-			end
+			return true
 		end,
 	})
 end
