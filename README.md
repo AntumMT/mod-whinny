@@ -25,6 +25,15 @@ Controls can be changed by setting `whinny.enable_mouse_ctrl` in the configurati
 
 Right-click again to dismount. Tamed horses do not wander.
 
+### Dependencies:
+
+Required: [default](https://github.com/minetest/minetest_game/tree/master/mods/default)
+
+Optional:
+- [mobs_redo](https://content.minetest.net/packages/TenPlus1/mobs/) (meat drops)
+- [farming](https://github.com/minetest/minetest_game/tree/master/mods/farming) or [farming_redo](https://content.minetest.net/packages/TenPlus1/farming/)
+- [player_api](https://github.com/minetest/minetest_game/tree/master/mods/player_api)
+
 ### Links:
 
 - [Forum][forum]
