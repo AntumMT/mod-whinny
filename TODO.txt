@@ -2,4 +2,3 @@
 TODO:
 - fix drops
 - add localization support
-- make turning gradual when using mouse control

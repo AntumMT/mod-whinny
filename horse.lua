@@ -1,4 +1,5 @@
 
+local use_player_api = core.global_exists("player_api")
 local rot_compensate = 4.7
 
 -- name, fill value
@@ -415,6 +416,11 @@ local function register_basehorse(name, craftitem, horse)
 			clicker:set_detach()
 			clicker:set_eye_offset({x=0, y=0, z=0}, {x=0, y=0, z=0})
 
+			if use_player_api then
+				player_api.player_attached[clicker:get_player_name()] = false
+				player_api.set_animation(clicker, "stand", 30)
+			end
+
 			-- stop galloping sounds
 			if handle_is_playing(self.gallop_handle_1) or handle_is_playing(self.gallop_handle_2) then
 				if not self:stop_gallop() then
@@ -448,16 +454,27 @@ local function register_basehorse(name, craftitem, horse)
 				return true
 			end
 
+			local attach_x = 0
 			local attach_y = 18
 			if core.features.object_independent_selectionbox then
 				attach_y = 10
 			end
 
+			if use_player_api then
+				attach_x = attach_x - 2
+				attach_y = attach_y + 4
+			end
+
 			self.driver = clicker
-			clicker:set_attach(self.object, "", {x=0, y=attach_y, z=0}, {x=0, y=90, z=0})
+			clicker:set_attach(self.object, "", {x=attach_x, y=attach_y, z=0}, {x=0, y=90, z=0})
 			clicker:set_eye_offset({x=0, y=8, z=0}, {x=0, y=0, z=0})
 			-- face same direction as horse
 			clicker:set_look_horizontal(self.object:get_yaw() + rot_compensate) -- FIXME: no idea why I need to add compensation
+
+			if use_player_api then
+				player_api.player_attached[pname] = true
+				player_api.set_animation(clicker, "sit", 30)
+			end
 		end
 	end
 
