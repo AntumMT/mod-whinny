@@ -729,8 +729,8 @@ function whinny:register_mob(name, def)
 				if hitter and hitter:is_player() and hitter:get_inventory() then
 					for _, drop in ipairs(self.drops) do
 						if math.random(1, drop.chance) == 1 then
-							hitter:get_inventory():add_item("main",
-								ItemStack(drop.name.." "..math.random(drop.min, drop.max)))
+							core.add_item(pos, drop.name .. " "
+								.. tostring(math.random(drop.min, drop.max)))
 						end
 					end
 
