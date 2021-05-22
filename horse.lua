@@ -81,6 +81,9 @@ local horse_drops = {}
 if core.registered_items["mobs:meat_raw"] then
 	table.insert(horse_drops, {name="mobs:meat_raw", chance=1, min=2, max=3})
 end
+if core.registered_items["mobs:leather"] then
+	table.insert(horse_drops, {name="mobs:leather", chance=1, min=1, max=1})
+end
 
 local function register_wildhorse(color)
 	whinny:register_mob("whinny:horse_" .. color, {
