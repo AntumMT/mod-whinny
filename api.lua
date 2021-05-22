@@ -719,12 +719,14 @@ function whinny:register_mob(name, def)
 				core.sound_play("player_damage", {object=puncher,})
 			end
 
-			if self.sounds and self.sounds.on_damage then
-				core.sound_play(self.sounds.on_damage.name,
-					{object=self.object, self.sounds.on_damage.gain})
-			end
+			local hp = self.object:get_hp()
 
-			if self.object:get_hp() <= 0 then
+			if hp > 0 then
+				if self.sounds and self.sounds.on_damage then
+					core.sound_play(self.sounds.on_damage.name,
+						{object=self.object, self.sounds.on_damage.gain})
+				end
+			else
 				if self.sounds.on_death ~= nil then
 					core.sound_play(self.sounds.on_death.name,
 						{object=self.object, self.sounds.on_death.gain})

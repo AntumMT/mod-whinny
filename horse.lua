@@ -501,7 +501,7 @@ local function register_basehorse(name, craftitem, horse)
 		return core.serialize(data)
 	end
 
-	function horse:on_punch(puncher, time_from_last_punch, tool_capabilities, direction)
+	function horse:on_punch(puncher, time_from_last_punch, tool_capabilities, dir, damage)
 		if puncher:is_player() then
 			local pname = puncher:get_player_name()
 
@@ -516,11 +516,37 @@ local function register_basehorse(name, craftitem, horse)
 			if self.driver then return true end
 		end
 
-		core.sound_play("player_damage", {object=self.object,})
-		if self.sounds and self.sounds.on_damage then
-			core.sound_play(self.sounds.on_damage.name,
-				{object=self.object, self.sounds.on_damage.gain})
+		-- do damage
+		self.object:set_hp(self.object:get_hp() - damage)
+
+		local hp = self.object:get_hp()
+
+		if hp > 0 then
+			core.sound_play("player_damage", {object=self.object,})
+			if self.sounds and self.sounds.on_damage then
+				core.sound_play(self.sounds.on_damage.name,
+					{object=self.object, self.sounds.on_damage.gain})
+			end
+		else
+			if self.sounds.on_death ~= nil then
+				core.sound_play(self.sounds.on_death.name,
+					{object=self.object, self.sounds.on_death.gain})
+			end
+
+			local pos = self.object:get_pos()
+			self.object:remove()
+
+			if horse_drops then
+				for _, drop in ipairs(horse_drops) do
+					if math.random(1, drop.chance) == 1 then
+						core.add_item(pos, drop.name .. " "
+							.. tostring(math.random(drop.min, drop.max)))
+					end
+				end
+			end
 		end
+
+		return true
 	end
 
 	core.register_entity(name, horse)
