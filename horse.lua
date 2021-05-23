@@ -1,4 +1,7 @@
 
+local S = core.get_translator(whinny.modname)
+
+
 local use_player_api = core.global_exists("player_api")
 local rot_compensate = math.rad(90) -- FIXME: no idea why I need to add rotation compensation
 
@@ -160,14 +163,14 @@ local function register_wildhorse(color)
 						core.serialize({owner=pname}))
 					self.object:remove()
 
-					core.chat_send_player(pname, "This horse is now tame!")
+					core.chat_send_player(pname, S("This horse is now tame!"))
 					return
 				else
-					core.chat_send_player(pname, "This horse is still hungry. Keep feeding it.")
+					core.chat_send_player(pname, S("This horse is still hungry. Keep feeding it."))
 				end
 			else
 				-- can't ride wild horses
-				core.chat_send_player(pname, "This horse is too wild to ride. Try feeding it.")
+				core.chat_send_player(pname, S("This horse is too wild to ride. Try feeding it."))
 			end
 		end,
 
@@ -437,12 +440,12 @@ local function register_basehorse(name, craftitem, horse)
 			-- FIXME: use other items if "mobs:lasso" not available (or any item named "lasso")
 			if wielded == "mobs:lasso" then
 				if self.owner and self.owner ~= pname then
-					core.chat_send_player(pname, "You cannot take " .. self.owner .. "'s horse")
+					core.chat_send_player(pname, S("You cannot take @1's horse.", self.owner))
 				else
 					local inv = clicker:get_inventory()
 					local stack = ItemStack(self.name)
 					if not inv:room_for_item("main", stack) then
-						core.chat_send_player(pname, "You do not have room in your inventory")
+						core.chat_send_player(pname, S("You do not have room in your inventory."))
 					else
 						inv:add_item("main", stack)
 						self.object:remove()
@@ -453,7 +456,7 @@ local function register_basehorse(name, craftitem, horse)
 			end
 
 			if self.owner and self.owner ~= pname then
-				core.chat_send_player(pname, "You cannot ride " .. self.owner .. "'s horse")
+				core.chat_send_player(pname, S("You cannot ride @1's horse.", self.owner))
 				return true
 			end
 
@@ -507,7 +510,7 @@ local function register_basehorse(name, craftitem, horse)
 
 			-- don't allow owned horses to be killed or owned by other players
 			if self.owner and pname ~= self.owner then
-				core.chat_send_player(pname, "Don't kill " .. self.owner .. "'s horse!!!")
+				core.chat_send_player(pname, S("Don't kill @1's horse!!!", self.owner))
 				return true
 			end
 
