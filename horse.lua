@@ -297,7 +297,7 @@ local function register_basehorse(name, craftitem, horse)
 			local ctrl = self.driver:get_player_control()
 
 			-- rotation (the faster we go, the less we rotate)
-			if whinny.enable_mouse_ctrl then
+			if whinny.turn_player_look then
 				-- FIXME: turning should be gradual
 				local driver_look = self.driver:get_look_horizontal()
 				if driver_look then

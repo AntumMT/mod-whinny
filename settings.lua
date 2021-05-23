@@ -21,4 +21,4 @@ whinny.spawn_height_min = tonumber(core.settings:get("whinny.spawn_height_min") 
 
 whinny.spawn_height_max = tonumber(core.settings:get("whinny.spawn_height_max") or 500)
 
-whinny.enable_mouse_ctrl = core.settings:get_bool("whinny.enable_mouse_ctrl", true)
+whinny.turn_player_look = core.settings:get_bool("mount_turn_player_look", true)
