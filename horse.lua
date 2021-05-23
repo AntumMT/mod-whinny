@@ -1,6 +1,6 @@
 
 local use_player_api = core.global_exists("player_api")
-local rot_compensate = 4.7
+local rot_compensate = math.rad(90) -- FIXME: no idea why I need to add rotation compensation
 
 -- name, fill value
 local fill_values = {
@@ -301,7 +301,7 @@ local function register_basehorse(name, craftitem, horse)
 				-- FIXME: turning should be gradual
 				local driver_look = self.driver:get_look_horizontal()
 				if driver_look then
-					self.object:set_yaw(driver_look - rot_compensate)
+					self.object:set_yaw(driver_look + rot_compensate)
 				end
 			else
 				if ctrl.left then
@@ -472,7 +472,7 @@ local function register_basehorse(name, craftitem, horse)
 			clicker:set_attach(self.object, "", {x=attach_x, y=attach_y, z=0}, {x=0, y=90, z=0})
 			clicker:set_eye_offset({x=0, y=8, z=0}, {x=0, y=0, z=0})
 			-- face same direction as horse
-			clicker:set_look_horizontal(self.object:get_yaw() + rot_compensate) -- FIXME: no idea why I need to add compensation
+			clicker:set_look_horizontal(self.object:get_yaw() - rot_compensate)
 
 			if use_player_api then
 				player_api.player_attached[pname] = true
