@@ -1,3 +1,6 @@
 
 TODO:
 - remove unused code
+- remove display_mob_spawn setting
+- use player facing direction to set horse direction when placed
+- make jump higher when running fast
