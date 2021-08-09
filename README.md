@@ -33,6 +33,7 @@ Optional:
 - [mobs_redo](https://content.minetest.net/packages/TenPlus1/mobs/) (meat drops)
 - [farming](https://github.com/minetest/minetest_game/tree/master/mods/farming) or [farming_redo](https://content.minetest.net/packages/TenPlus1/farming/)
 - [player_api](https://github.com/minetest/minetest_game/tree/master/mods/player_api)
+- [sounds](https://content.minetest.net/packages/AntumDeluge/sounds/)
 
 ### Links:
 
