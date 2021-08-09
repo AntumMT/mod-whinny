@@ -578,16 +578,11 @@ local function register_tamehorse(color, description)
 	)
 end
 
-local spawn_nodes = {
-	"default:dirt_with_grass",
-	"default:dirt_with_dry_grass",
-}
-
 for color, name in pairs({["brown"]="Brown Horse", ["white"]="White Horse", ["black"]="Black Horse",}) do
 	register_tamehorse(color, name)
 	register_wildhorse(color)
 
-	whinny:register_spawn("whinny:horse_" .. color, spawn_nodes, 20, 6,
+	whinny:register_spawn("whinny:horse_" .. color, whinny.spawn_nodes, 20, 6,
 		whinny.spawn_chance, 1, whinny.spawn_height_min, whinny.spawn_height_max)
 
 	-- to simplify item handling

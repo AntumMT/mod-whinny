@@ -16,3 +16,6 @@ whinny.spawn_height_max (Spawn max height) int 500
 
 # Use facing direction to turn instead of a/d keys.
 mount_turn_player_look (Turn with look direction) bool true
+
+# Comma-separated list of nodes on which horses can spawn.
+whinny.spawn_nodes (Whinny spawn nodes) string default:dirt_with_grass,default:dirt_with_dry_grass
