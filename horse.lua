@@ -16,6 +16,20 @@ local fill_values = {
 	["farming:cucumber"] = 2,
 }
 
+core.register_on_mods_loaded(function()
+	local can_feed = false
+	for food in pairs(fill_values) do
+		if core.registered_items[food] then
+			can_feed = true
+			break
+		end
+	end
+
+	if not can_feed then
+		whinny.log("warning", "no compatible foods registered. please install \"default\" or \"farming\" mod to be able to tame & ride horses.")
+	end
+end)
+
 local horse_likes = {}
 for iname, fill in pairs(fill_values) do
 	if core.registered_items[iname] then
