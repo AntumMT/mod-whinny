@@ -38,7 +38,7 @@ Optional:
 
 - [Forum][forum]
 - [Git repo](https://github.com/AntumMT/mod-whinny)
-- [Changelog](CHANGES.txt)
+- [Changelog](changelog.txt)
 - [TODO](TODO.txt)
 
 
