@@ -3,3 +3,4 @@ TODO:
 - remove unused code
 - remove display_mob_spawn setting
 - make jump higher when running fast
+- add galloping sound when moving backward

@@ -1,6 +1,11 @@
 
 local yaw = {}
 
+local sound_horse = sounds_enabled and sounds.horse
+local sound_horse_snort = sounds_enabled and sounds.horse_snort
+local sound_horse_neigh = sounds_enabled and sounds.horse_neigh
+local sound_entity_hit = sounds_enabled and sounds.entity_hit
+
 function whinny:register_mob(name, def)
 	core.register_entity(name, {
 		name = name,
@@ -245,10 +250,9 @@ function whinny:register_mob(name, def)
 				self.timer = 0
 			end
 
-			if self.sounds and self.sounds.random and math.random(1, 500) <= 1 then
-				local to_play = self.sounds.random[self.state]
-				if to_play then
-					core.sound_play(to_play.name, {object=self.object, to_play.gain})
+			if sound_horse then
+				if math.random(1, 500) == 1 then
+					sound_horse({object=self.object})
 				end
 			end
 
@@ -715,21 +719,19 @@ function whinny:register_mob(name, def)
 			if weapon:get_definition().sounds ~= nil then
 				local s = math.random(0, #weapon:get_definition().sounds)
 				core.sound_play(weapon:get_definition().sounds[s], {object=puncher,})
-			else
-				core.sound_play("player_damage", {object=puncher,})
+			elseif sound_entity_hit then
+				sound_entity_hit({object=puncher})
 			end
 
 			local hp = self.object:get_hp()
 
 			if hp > 0 then
-				if self.sounds and self.sounds.on_damage then
-					core.sound_play(self.sounds.on_damage.name,
-						{object=self.object, self.sounds.on_damage.gain})
+				if sound_entity_hit then
+					sound_entity_hit({object=self.object})
 				end
 			else
-				if self.sounds.on_death ~= nil then
-					core.sound_play(self.sounds.on_death.name,
-						{object=self.object, self.sounds.on_death.gain})
+				if sound_horse_snort then
+					sound_horse_snort(2, {object=self.object})
 				end
 
 				local pos = self.object:get_pos()

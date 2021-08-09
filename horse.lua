@@ -26,24 +26,14 @@ for iname, fill in pairs(fill_values) do
 	end
 end
 
-local sounds = {
-	neigh = {
-		name = "whinny_horse_neigh_01",
-		gain = 1.0,
-	},
-	snort1 = {
-		name = "whinny_horse_snort_01",
-		gain = 1.0,
-	},
-	snort2 = {
-		name = "whinny_horse_snort_02",
-		gain = 1.0,
-	},
-	distress = {
-		name = "whinny_horse_neigh_02",
-		gain = 1.0,
-	},
-}
+
+local sounds_enabled = core.global_exists("sounds")
+local sound_horse = sounds_enabled and sounds.horse
+local sound_horse_snort = sounds_enabled and sounds.horse_snort
+local sound_horse_neigh = sounds_enabled and sounds.horse_neigh
+local sound_gallop = sounds_enabled and sounds.gallop
+local sound_apple_bite = sounds_enabled and sounds.bite
+local sound_entity_hit = sounds_enabled and sounds.entity_hit
 
 
 -- galloping sounds
@@ -109,14 +99,6 @@ local function register_wildhorse(color)
 		water_damage = 1,
 		lava_damage = 5,
 		light_damage = 0,
-		sounds = {
-			on_damage = sounds.distress,
-			on_death = sounds.snort2,
-			random = {
-				stand = sounds.snort1,
-				walk = sounds.neigh,
-			}
-		},
 		animation = {
 			speed_normal = 20,
 			stand_start = 300,
@@ -148,7 +130,9 @@ local function register_wildhorse(color)
 				if not fills then fills = 1 end
 
 				self.appetite = self.appetite - fills
-				core.sound_play("whinny_apple_bite", {object=self.object})
+				if sound_apple_bite then
+					sound_apple_bite(1, {object=self.object})
+				end
 
 				if not whinny.creative then
 					item:take_item()
@@ -254,13 +238,14 @@ local function register_basehorse(name, craftitem, horse)
 	end
 
 	function horse:start_gallop(stage)
-		local to_play = "whinny_gallop_0" .. tostring(stage)
-		if stage == 1 and self.gallop_handle_1 < 0 then
-			self.gallop_handle_1 = core.sound_play(to_play, {object=self.object, loop=true})
-			return self.gallop_handle_1 >= 0
-		elseif stage == 2 and self.gallop_handle_2 < 0 then
-			self.gallop_handle_2 = core.sound_play(to_play, {object=self.object, loop=true})
-			return self.gallop_handle_2 >= 0
+		if sound_gallop then
+			if stage == 1 and self.gallop_handle_1 < 0 then
+				self.gallop_handle_1 = sound_gallop(stage, {object=self.object, loop=true})
+				return self.gallop_handle_1 and self.gallop_handle_1 >= 0
+			elseif stage == 2 and self.gallop_handle_2 < 0 then
+				self.gallop_handle_2 = sound_gallop(stage, {object=self.object, loop=true})
+				return self.gallop_handle_2 and self.gallop_handle_2 >= 0
+			end
 		end
 	end
 
@@ -347,10 +332,9 @@ local function register_basehorse(name, craftitem, horse)
 				self.speed = self.speed * 0.90
 			end
 
-			if self.sounds and self.sounds.random and math.random(1, 500) <= 1 then
-				local to_play = self.sounds.random.stand
-				if to_play then
-					core.sound_play(to_play.name, {object=self.object, to_play.gain})
+			if sound_horse then
+				if math.random(1, 500) == 1 then
+					sound_horse({object=self.object})
 				end
 			end
 		end
@@ -528,15 +512,15 @@ local function register_basehorse(name, craftitem, horse)
 		local hp = self.object:get_hp()
 
 		if hp > 0 then
-			core.sound_play("player_damage", {object=self.object,})
-			if self.sounds and self.sounds.on_damage then
-				core.sound_play(self.sounds.on_damage.name,
-					{object=self.object, self.sounds.on_damage.gain})
+			if sound_entity_hit then
+				sound_entity_hit({object=self.object})
+			end
+			if sound_horse_neigh then
+				sound_horse_neigh(2, {object=self.object})
 			end
 		else
-			if self.sounds.on_death ~= nil then
-				core.sound_play(self.sounds.on_death.name,
-					{object=self.object, self.sounds.on_death.gain})
+			if sound_horse_snort then
+				sound_horse_snort(2, {object=self.object})
 			end
 
 			local pos = self.object:get_pos()
@@ -572,14 +556,6 @@ local function register_tamehorse(color, description)
 			visual_size = {x=1, y=1},
 			mesh = "horse.x",
 			textures = {"whinny_horse_" .. color .. "_mesh.png"},
-			sounds = {
-				on_damage = sounds.distress,
-				on_death = sounds.snort2,
-				random = {
-					stand = sounds.snort1,
-					walk = sounds.neigh,
-				}
-			},
 			animation = {
 				speed_normal = 20,
 				stand_start = 300,
