@@ -10,7 +10,6 @@ A continuation of the [whinny][forum] mod for [Minetest], that adds tameable & r
 
 - Code: [MIT](LICENSE.txt)
 - Models & textures by sparky: CC0
-- Sounds: see [sounds/sources.txt](sounds/sources.txt)
 
 ### Usage:
 
