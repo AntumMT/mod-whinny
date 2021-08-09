@@ -245,7 +245,7 @@ function whinny:register_mob(name, def)
 				self.timer = 0
 			end
 
-			if self.sounds and self.sounds.random and math.random(1, 100) <= 1 then
+			if self.sounds and self.sounds.random and math.random(1, 500) <= 1 then
 				local to_play = self.sounds.random[self.state]
 				if to_play then
 					core.sound_play(to_play.name, {object=self.object, to_play.gain})

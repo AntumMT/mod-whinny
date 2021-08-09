@@ -347,7 +347,7 @@ local function register_basehorse(name, craftitem, horse)
 				self.speed = self.speed * 0.90
 			end
 
-			if self.sounds and self.sounds.random and math.random(1, 100) <= 1 then
+			if self.sounds and self.sounds.random and math.random(1, 500) <= 1 then
 				local to_play = self.sounds.random.stand
 				if to_play then
 					core.sound_play(to_play.name, {object=self.object, to_play.gain})
