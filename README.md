@@ -26,9 +26,8 @@ Right-click again to dismount. Tamed horses do not wander.
 
 ### Dependencies:
 
-Required: [default](https://github.com/minetest-game/default)
-
 Optional:
+- [default](https://github.com/minetest-game/default)
 - [mobs_redo](https://content.luanti.org/packages/TenPlus1/mobs/) (meat drops)
 - [farming](https://github.com/minetest-game/farming) or [farming_redo](https://content.luanti.org/packages/TenPlus1/farming/)
 - [player_api](https://github.com/minetest-game/player_api)
