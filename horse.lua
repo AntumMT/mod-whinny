@@ -81,7 +81,7 @@ local function register_wildhorse(color)
 		type = "animal",
 		hp_min = 10,
 		hp_max = 10,
-		appetite = 40,
+		appetite = whinny.appetite,
 		collisionbox = {-.5, -0.01, -.5, .5, 1.4, .5},
 		available_textures = {
 			total = 1,

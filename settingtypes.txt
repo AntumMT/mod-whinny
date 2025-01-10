@@ -25,3 +25,8 @@ whinny.spawn_nodes (Whinny spawn nodes) string default:dirt_with_grass,default:d
 # - key: item name
 # - value: filling value (higher means less required to tame)
 whinny.eats (Items used to tame horses) string default:apple=2,farming:wheat=1,farming:barley=3,farming:oat=5,farming:carrot=4,farming:carrot_gold=5,farming:cucumber=2
+
+# Value required to tame horse with food.
+#
+# Must be 1 or more.
+whinny.appetite (Horse appetite) int 40 1

@@ -75,3 +75,16 @@ else
 		parse_fill_item(item)
 	end
 end
+
+
+--- Value required to tame horse with food.
+--
+-- Must be 1 or more.
+--
+-- @setting whinny.appetite
+-- @settype int
+-- @default 40
+whinny.appetite = tonumber(core.settings:get("whinny.appetite")) or 40
+if whinny.appetite < 1 then
+	whinny.appetite = 40
+end
