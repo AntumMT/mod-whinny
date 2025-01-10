@@ -1,8 +1,8 @@
-## Horses for Minetest
+## Horses for Luanti
 
 ### Description:
 
-A continuation of the [whinny][forum] mod for [Minetest], that adds tameable & rideable horses.
+A continuation of the [whinny][forum] mod for [Luanti (Minetest)](https://luanti.org/), that adds tameable & rideable horses.
 
 ![screenshot](screenshot.png)
 
@@ -26,21 +26,20 @@ Right-click again to dismount. Tamed horses do not wander.
 
 ### Dependencies:
 
-Required: [default](https://github.com/minetest/minetest_game/tree/master/mods/default)
+Required: [default](https://github.com/minetest-game/default)
 
 Optional:
-- [mobs_redo](https://content.minetest.net/packages/TenPlus1/mobs/) (meat drops)
-- [farming](https://github.com/minetest/minetest_game/tree/master/mods/farming) or [farming_redo](https://content.minetest.net/packages/TenPlus1/farming/)
-- [player_api](https://github.com/minetest/minetest_game/tree/master/mods/player_api)
-- [sounds](https://content.minetest.net/packages/AntumDeluge/sounds/)
+- [mobs_redo](https://content.luanti.org/packages/TenPlus1/mobs/) (meat drops)
+- [farming](https://github.com/minetest-game/farming) or [farming_redo](https://content.luanti.org/packages/TenPlus1/farming/)
+- [player_api](https://github.com/minetest-game/player_api)
+- [sounds](https://content.luanti.org/packages/AntumDeluge/sounds/)
 
 ### Links:
 
 - [Forum][forum]
-- [Git repo](https://github.com/AntumMT/mod-whinny)
+- [Git repo](https://codeberg.org/AntumLuanti/mod-whinny)
 - [Changelog](changelog.txt)
 - [TODO](TODO.txt)
 
 
-[Minetest]: http://minetest.net/
-[forum]: https://forum.minetest.net/viewtopic.php?t=17170
+[forum]: https://forum.luanti.org/viewtopic.php?t=17170
