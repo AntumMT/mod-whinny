@@ -20,7 +20,7 @@ To ride tamed horsed, right-click (place action) the entity to mount it. Use the
 - mouse (follows player facing direction) (default)
 - A/D keys
 
-Controls can be changed by setting `whinny.enable_mouse_ctrl` in the configuration.
+Controls can be changed by setting `mount_turn_player_look` in the configuration.
 
 Right-click again to dismount. Tamed horses do not wander.
 
