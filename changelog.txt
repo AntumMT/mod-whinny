@@ -3,6 +3,7 @@ next
 ----
 - increased delay between random sounds
 - uses sounds mod
+- items that horses like & appetite configred from settings
 
 
 v1.2
