@@ -5,20 +5,9 @@ local S = core.get_translator(whinny.modname)
 local use_player_api = core.global_exists("player_api")
 local rot_compensate = math.rad(90) -- FIXME: no idea why I need to add rotation compensation
 
--- name, fill value
-local fill_values = {
-	["default:apple"] = 2,
-	["farming:wheat"] = 1,
-	["farming:barley"] = 3,
-	["farming:oat"] = 5,
-	["farming:carrot"] = 4,
-	["farming:carrot_gold"] = 5,
-	["farming:cucumber"] = 2,
-}
-
 core.register_on_mods_loaded(function()
 	local can_feed = false
-	for food in pairs(fill_values) do
+	for food in pairs(whinny.fill_values) do
 		if core.registered_items[food] then
 			can_feed = true
 			break
@@ -26,18 +15,13 @@ core.register_on_mods_loaded(function()
 	end
 
 	if not can_feed then
-		whinny.log("warning", "no compatible foods registered. please install \"default\" or \"farming\" mod to be able to tame & ride horses.")
+		whinny.log("warning", "no compatible foods registered, cannot tame horses.")
 	end
 end)
 
 local horse_likes = {}
-for iname, fill in pairs(fill_values) do
-	if core.registered_items[iname] then
-		table.insert(horse_likes, iname)
-	else
-		whinny.log("warning", "\"" .. iname
-			.. "\" is not a registered item, removing it from items that horse will follow")
-	end
+for iname, fill in pairs(whinny.fill_values) do
+	table.insert(horse_likes, iname)
 end
 
 
@@ -140,7 +124,7 @@ local function register_wildhorse(color)
 			end
 
 			if wants then
-				local fills = fill_values[item_name]
+				local fills = whinny.fill_values[item_name]
 				if not fills then fills = 1 end
 
 				self.appetite = self.appetite - fills
