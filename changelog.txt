@@ -1,9 +1,14 @@
 
+next
+----
+- item used to place horse in inventory configured from settings
+
+
 2025-01-10
 ----------
 - increased delay between random sounds
 - uses sounds mod
-- items that horses like & appetite configred from settings
+- items that horses like & appetite configured from settings
 
 
 v1.2

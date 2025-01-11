@@ -30,3 +30,6 @@ whinny.eats (Items used to tame horses) string default:apple=2,farming:wheat=1,f
 #
 # Must be 1 or more.
 whinny.appetite (Horse appetite) int 40 1
+
+# Name of item that player can wield to place horse in inventory.
+whinny.pickup_with (Item used to "pick up" horse) string mobs:lasso

@@ -422,8 +422,7 @@ local function register_basehorse(name, craftitem, horse)
 			local pname = clicker:get_player_name()
 
 			local wielded = clicker:get_wielded_item():get_name()
-			-- FIXME: use other items if "mobs:lasso" not available (or any item named "lasso")
-			if wielded == "mobs:lasso" then
+			if wielded == whinny.pickup_with then
 				if self.owner and self.owner ~= pname then
 					core.chat_send_player(pname, S("You cannot take @1's horse.", self.owner))
 				else

@@ -88,3 +88,11 @@ whinny.appetite = tonumber(core.settings:get("whinny.appetite")) or 40
 if whinny.appetite < 1 then
 	whinny.appetite = 40
 end
+
+
+--- Name of item that player can wield to place horse in inventory.
+--
+--  @setting whinny.pickup_with
+--  @settype string
+--  @default mobs:lasso
+whinny.pickup_with = core.settings:get("whinny.pickup_with") or "mobs:lasso"
