@@ -89,7 +89,7 @@ local function register_wildhorse(color)
 		},
 		visual = "mesh",
 		drops = horse_drops,
-		mesh = "horsemob.x",
+		mesh = "whinny_horse_wild.x",
 		makes_footstep_sound = true,
 		walk_velocity = 1,
 		armor = 100,
@@ -551,7 +551,7 @@ local function register_tamehorse(color, description)
 			visual = "mesh",
 			stepheight = 1.1,
 			visual_size = {x=1, y=1},
-			mesh = "horse.x",
+			mesh = "whinny_horse_tame.x",
 			textures = {"whinny_horse_" .. color .. "_mesh.png"},
 			animation = {
 				speed_normal = 20,
