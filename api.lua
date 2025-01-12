@@ -1,6 +1,7 @@
 
 local yaw = {}
 
+local sounds_enabled = core.global_exists("sounds")
 local sound_horse = sounds_enabled and sounds.horse
 local sound_horse_snort = sounds_enabled and sounds.horse_snort
 local sound_horse_neigh = sounds_enabled and sounds.horse_neigh
