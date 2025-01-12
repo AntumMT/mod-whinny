@@ -11,14 +11,16 @@ function whinny:register_mob(name, def)
 	core.register_entity(name, {
 		name = name,
 		hp_min = def.hp_min,
-		hp_max = def.hp_max,
+		initial_properties = {
+			hp_max = def.hp_max,
+			physical = true,
+			collisionbox = def.collisionbox,
+			visual = def.visual,
+			visual_size = def.visual_size,
+			mesh = def.mesh,
+			makes_footstep_sound = def.makes_footstep_sound
+		},
 		appetite = def.appetite,
-		physical = true,
-		collisionbox = def.collisionbox,
-		visual = def.visual,
-		visual_size = def.visual_size,
-		mesh = def.mesh,
-		makes_footstep_sound = def.makes_footstep_sound,
 		view_range = def.view_range,
 		walk_velocity = def.walk_velocity,
 		run_velocity = def.run_velocity,
@@ -643,7 +645,8 @@ function whinny:register_mob(name, def)
 					end
 
 					local p = self.object:get_pos()
-					p.y = p.y + (self.collisionbox[2] + self.collisionbox[5]) / 2
+					local box = self.object:get_properties().collisionbox
+					p.y = p.y + (box[2] + box[5]) / 2
 					local obj = core.add_entity(p, self.arrow)
 					local amount = (vec.x^2 + vec.y^2 + vec.z^2)^0.5
 					local v = obj:get_luaentity().velocity
@@ -660,7 +663,8 @@ function whinny:register_mob(name, def)
 			-- reset HP
 			local pos = self.object:get_pos()
 			local distance_rating = ((get_distance({x=0, y=0, z=0}, pos)) / 20000)
-			local newHP = self.hp_min + math.floor(self.hp_max * distance_rating)
+			local props = self.object:get_properties()
+			local newHP = self.hp_min + math.floor(props.hp_max * distance_rating)
 			self.object:set_hp(newHP)
 
 			self.object:set_armor_groups({fleshy=self.armor})
@@ -838,7 +842,8 @@ function whinny:register_spawn(name, nodes, max_light, min_light, chance, active
 			local distance_rating = ((get_distance({x=0,y=0,z=0}, pos)) / 15000)
 			if mob then
 				mob = mob:get_luaentity()
-				local newHP = mob.hp_min + math.floor(mob.hp_max * distance_rating)
+				local props = mob.object:get_properties()
+				local newHP = mob.hp_min + math.floor(props.hp_max * distance_rating)
 				mob.object:set_hp(newHP)
 			end
 
@@ -848,10 +853,12 @@ end
 
 function whinny:register_arrow(name, def)
 	core.register_entity(name, {
-		physical = false,
-		visual = def.visual,
-		visual_size = def.visual_size,
-		textures = def.textures,
+		initial_properties = {
+			physical = false,
+			visual = def.visual,
+			visual_size = def.visual_size,
+			textures = def.textures
+		},
 		velocity = def.velocity,
 		hit_player = def.hit_player,
 		hit_node = def.hit_node,

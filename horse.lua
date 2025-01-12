@@ -80,17 +80,19 @@ local function register_wildhorse(color)
 	whinny:register_mob("whinny:horse_" .. color, {
 		type = "animal",
 		hp_min = 10,
-		hp_max = 10,
+		initial_properties = {
+			hp_max = 10,
+			collisionbox = {-.5, -0.01, -.5, .5, 1.4, .5},
+			visual = "mesh",
+			mesh = "whinny_horse_wild.x",
+			makes_footstep_sound = true
+		},
 		appetite = whinny.appetite,
-		collisionbox = {-.5, -0.01, -.5, .5, 1.4, .5},
 		available_textures = {
 			total = 1,
 			texture_1 = {"whinny_horse_" .. color .. "_mesh.png"},
 		},
-		visual = "mesh",
 		drops = horse_drops,
-		mesh = "whinny_horse_wild.x",
-		makes_footstep_sound = true,
 		walk_velocity = 1,
 		armor = 100,
 		drawtype = "front",
@@ -546,13 +548,15 @@ local function register_tamehorse(color, description)
 			inventory_image = "whinny_horse_" .. color .. "_inv.png",
 		},
 		{
-			physical = true,
-			collisionbox = {-.5, -0.01, -.5, .5, 1.4, .5},
-			visual = "mesh",
-			stepheight = 1.1,
-			visual_size = {x=1, y=1},
-			mesh = "whinny_horse_tame.x",
-			textures = {"whinny_horse_" .. color .. "_mesh.png"},
+			initial_properties = {
+				physical = true,
+				collisionbox = {-.5, -0.01, -.5, .5, 1.4, .5},
+				visual = "mesh",
+				visual_size = {x=1, y=1},
+				mesh = "whinny_horse_tame.x",
+				textures = {"whinny_horse_" .. color .. "_mesh.png"},
+				stepheight = 1.1
+			},
 			animation = {
 				speed_normal = 20,
 				stand_start = 300,
