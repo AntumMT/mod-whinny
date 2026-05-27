@@ -36,7 +36,10 @@ Optional:
 ### Links:
 
 - [Forum][forum]
-- [Git repo](https://codeberg.org/AntumLuanti/mod-whinny)
+- Git repos:
+    - [Codeberg](https://codeberg.org/AntumLuanti/mod-whinny)
+    - [GitHub](https://github.com/AntumMT/mod-whinny)
+    - [GitLab](https://gitlab.com/AntumMT/mod-whinny)
 - [Changelog](changelog.txt)
 - [TODO](TODO.txt)
 
