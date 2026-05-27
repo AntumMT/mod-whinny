@@ -1,0 +1,19 @@
+{
+	"type": "MOD",
+	"title": "Horses (whinny)",
+	"name": "whinny",
+	"short_description": "Rideable horses.",
+	"dev_state": "BETA",
+	"ai_disclosure": "NONE",
+	"tags": ["mobs", "transport"],
+	"content_warnings": null,
+	"license": "MIT",
+	"media_license": "CC0-1.0",
+	"repo": "https://codeberg.org/AntumLuanti/mod-whinny",
+	"website": null,
+	"issue_tracker": "https://codeberg.org/AntumLuanti/mod-whinny/issues",
+	"forums": "17170",
+	"video_url": null,
+	"donate_url": null,
+	"translation_url": null
+}
