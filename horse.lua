@@ -459,7 +459,7 @@ local function register_basehorse(name, craftitem, horse)
 
 			self.driver = clicker
 			clicker:set_attach(self.object, "", {x=attach_x, y=attach_y, z=0}, {x=0, y=90, z=0})
-			clicker:set_eye_offset({x=0, y=8, z=0}, {x=0, y=0, z=0})
+			clicker:set_eye_offset({x=0, y=14, z=0}, {x=0, y=0, z=0})
 			-- face same direction as horse
 			clicker:set_look_horizontal(self.object:get_yaw() - rot_compensate)
 
