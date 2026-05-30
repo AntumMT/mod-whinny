@@ -1,7 +1,14 @@
 
-next
-----
+2026-05-29
+----------
+- fixed eye offset for Luanti 5.x
+
+
+2025-01-12
+----------
 - item used to place horse in inventory configured from settings
+- renamed models
+- fixed undeclared variable
 
 
 2025-01-10
